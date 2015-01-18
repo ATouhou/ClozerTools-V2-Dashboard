@@ -1,0 +1,96 @@
+$('.viewlargemap').click(function(){
+$('#leadview').show().addClass('animated fadeInUp');
+var url = '../lead/getmap';
+$.getJSON(url, function(data) {
+
+$("#map2").gmap3({
+  marker:{
+    values: data.map,
+    options:{
+     draggable:false,
+     clickable:true
+    },
+    events:{
+      mouseover: function(marker, event, context){
+        var map = $(this).gmap3("get"),
+          infowindow = $(this).gmap3({get:{name:"infowindow"}});
+        if (infowindow){
+          infowindow.open(map, marker);
+          infowindow.setContent(context.data);
+        } else {
+          $(this).gmap3({
+            infowindow:{
+              anchor:marker, 
+              options:{content: context.data}
+            }
+          });
+        }
+      },
+      mouseout: function(){
+        var infowindow = $(this).gmap3({get:{name:"infowindow"}});
+        if (infowindow){
+          infowindow.close();
+        }
+      },
+      click: function(marker,event,data){
+      var url = '../lead/viewlead/'+data.id;
+
+      	$.getJSON(url,function(data){
+      		var d = data.attributes;
+
+      		var calls = data.relationships.calls;
+      		var apps = data.relationships.appointments;
+ 
+      		$('.cust_num').html(d.cust_num);
+      		$('.cust_name').html(d.cust_name);
+      		$('.spouse_name').html(d.spouse_name);
+      		$('.address').html(d.address);
+      		$('.leadtype').html(d.leadtype);
+      		$('.status').html(d.status);
+      		$('.result').html(d.result);
+      		$('.booked_by').html(d.booker_name);
+
+      		if(d.result=="SOLD"){
+      			$('.salebutton').html("<button class='btn btn-default'><i class='cus-money-dollar'></i>&nbsp;VIEW SALE</button>");
+      		} else {$('.salebutton').html("");}
+
+      		var callhist="";var apphist="";
+
+      		if(apps.length>0){
+      		$.each(apps,function(i,val){
+      			apphist+="<tr><td>"+val.attributes.app_time+"</td><td>"+val.attributes.app_date+"</td><td>"+val.attributes.booked_by+"</td><td>"+val.attributes.booked_at+"</td><td>"+val.attributes.status+"</td></tr>";
+      		});}
+
+      		if(calls.length>0){
+      			$.each(calls,function(i,val){
+      			callhist+="<tr><td>"+val.attributes.created_at+"</td><td>"+val.attributes.caller_name+"</td><td>"+val.attributes.result+"</td></tr>";
+      		});
+      		}
+	
+      	    $('.callhistory').html(callhist);
+      		$('.appointmenthistory').html(apphist);
+      		$('#viewleadbox').show().addClass('animated slideInLeft');
+      	});
+      },
+    }
+  },
+  map:{
+    options:{
+      zoom: 14,
+       center: new google.maps.LatLng(49.219094,-123.999027),
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+         mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID],
+          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+        },
+        navigationControl: true,
+        scrollwheel: true,
+        streetViewControl: true
+     }
+  }
+
+
+});
+});
+});

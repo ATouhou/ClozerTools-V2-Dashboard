@@ -1,0 +1,378 @@
+@if((isset($sale))&&(!empty($sale)))
+
+<div class="row-fluid pagination">
+            	Results Pages : 
+            	@for($i=0;$i<$page;$i++)
+            	<?php if($i>120){ $class='hide';} else {$class='';};
+            	if(($salecount!=0)&&($salecount/10>$i)){
+            	
+            		$c = "btn-primary";
+            		if($pagenum==$i){$c = "btn-danger";};
+            		;?><button class="{{$class}} btn btn-default {{$c}} btn-mini paginateLeads" style="margin-bottom:10px;" {{$databuttons}} data-skip="{{$i*$take}}" data-take="{{$take}}"><strong>{{$i+1}}</strong></button><?php
+            	} else {
+            		$c = "";
+            	}
+            	?>
+            	@endfor
+            </div>
+
+ 		<h4 style="margin-top-20px;">
+               Sale Results {{$stitle}}
+            </h4>
+<table class="table table-responsive table-condensed salestable " style="font-size:12px; border:1px solid #3e3e3e">
+	
+<?php $count=1;?>
+            	@foreach($sale as $val)
+            	<?php $sale2 = Sale::find($val->id);?>
+            	
+
+            	<?php if(($val->status=="CANCELLED")&&($val->picked_up==1)) {$row = "finishcancel";} else {$row = $val->status;};?>
+            	@if(($val->funded==1)&&($val->status!="CANCELLED")&&($val->status!="PAID"))
+            	<?php $row="PAID";?>
+            	@endif
+            	@if($val->paid==1)
+            	<?php $row="completed";?>
+            	@endif
+
+            	    	<tr class='{{$row}} ' id='rowid-{{$val->id}}'>
+
+            	        	<td>{{$count++}}</td>
+            	        	<td><span class="small">{{date('M d',strtotime($val->date))}}</span>
+            	        		<br/><span class='badge badge-info tooltwo special revealDetails' data-type='lead' title='Click to see this leads Information' data-id="{{$val->id}}" >I</span>
+            	        		
+            	        	</td>
+            	        	<td>{{$val->id}}</td>
+            	        	<td><span class="edit tooltwo" title="Click to change Customer Name" id="cust_name|{{$val->id}}">{{$val->cust_name}}</span><br/>
+            	        	@if(($val->status!="CANCELLED")&&($val->status!="TURNDOWN"))
+            	        	<?php 
+                      				$progress=0;
+                      				$t1=0;$t2=0;$t3=0;$t4=0;$t5=0;$t6=0;$t7=0;
+                      				if(!empty($sale2->payment)){$progress++; $t1=1;}
+                      				if((!empty($sale2->defone))||(!empty($sale2->deftwo))||(!empty($sale2->maj))||(!empty($sale2->att))){$progress++;$t2=1;}
+                      				
+                      				if(($sale2->payout!="0.00")){$progress++;$t3=1;}
+                      				if(($sale2->payout=="0.00")&&($sale2->ridealong_payout!="0.00")){$progress++;$t3=1;}
+                      				
+                      				if((!empty($sale2->docs))||($sale2->conf==1)){$progress++;$t4=1;}
+							if($sale2->funded==1){$progress++; $t5=1;}
+                      				if(!empty($sale2->invoice)){$progress++;$t6=1;}
+							if((!empty($sale2->invoice))&&($sale2->invoice->status=="paid")){$progress++;$t7=1;};
+				
+							
+							$p="progress-success active";
+							if($progress<=1){$p = "progress-danger active";} 
+							if($progress<=2){$p = "progress-warning active";} 
+							if(($progress>2)&&($progress<=4)){$p = "active";} 
+							$progress=floor((($progress/7)*100));
+							?>
+            	        	
+		                    <div class=" progress {{$p}} slim tooltwo revealDetails" data-type="progress" data-id="{{$val->id}}" title="This sales progress is {{$progress}}%. Click for more info" style="width:80%;">
+		                    	<div class="bar progID-{{$val->id}}" data-percentage="{{$progress}}"></div>
+		                    </div>
+		                    @endif
+            	        	</td>
+
+            	        	<td><span class="small">{{substr($sale2->lead->city,0,12)}}...</span></td>
+            	        	<td><span class="paymentedit tooltwo" data-id='{{$val->id}}' title="Click to change payment type" id="payment|{{$val->id}}">@if(!empty($val->payment)){{$val->payment}} @endif</span>
+            	        		<br/>
+            	        		@if((!empty($val->payment))&&($val->status!="CANCELLED")&&($val->status!="TURNDOWN"))
+            	        		<input id="funded-{{$sale2->id}}" data-theid='{{$val->id}}' class='markpaid tooltwo' title='Click here to mark this deal as funded' data-id='funded|{{$val->id}}' type='checkbox' @if(!empty($val->funded)&&($val->funded==1)) checked='checked' @endif /> 
+            	        		
+            	        		<span class='checkboxAcceptance payAccept-{{$sale2->id}} @if($val->funded==1) blackText' @else redText' @endif'>
+            	        			@if(($val->payment!="Lendcare")&&($val->payment!="JP"))
+            	        			Accepted
+            	        			@elseif(($val->payment=="CASH")||($val->payment=="CHQ"))
+            	        			Paid
+            	        			@else
+            	        			Funded
+            	        			@endif 
+            	        		</span>
+            	        		@else
+            	        		@endif
+	           	        	</td>
+	           	        	<td>
+	           	        		<span class="pay_typedit" id="pay_type|{{$val->id}}">{{$val->pay_type}}</span>
+	           	        	</td>
+	           	        	<td>
+	           	        		<span class="termsedit" id="deferal|{{$val->id}}">{{$val->deferal}}</span>
+	           	        	</td>
+
+            	        	<td id='status-{{$val->id}}'>
+            	        		@if(($val->status=="CANCELLED")||($val->status=="TURNDOWN"))
+            	        		@if($val->picked_up==0)
+            	        		<span class="statusedit status-{{$sale2->id}} tooltwo" title="Click to change the status of this deal" data-id='{{$val->id}}' id="status|{{$val->id}}">{{$val->status}}</span>
+            	        		<div id='pickup-{{$val->id}}'>
+            	        		<a class='tooltwo btn bordbut btn-mini btn-success pickupSale' title='Click if machines are PICKED UP. This will return machines to Stock/Rep' style='color:#000;' data-id='{{$val->id}}'>RETURN</a>
+            	        		@else
+            	        		<span class="statusedit status-{{$sale2->id}} tooltwo" title="Click to change the status of this deal" data-id='{{$val->id}}' id="status|{{$val->id}}">{{$val->status}}</span>
+            	        		<div id='pickup-{{$val->id}}'>
+            	        		@endif
+
+            	        		@else
+            	        		<span class="statusedit status-{{$sale2->id}}" data-id='{{$val->id}}' id="status|{{$val->id}}">{{$val->status}}</span>
+            	        		<div id='pickup-{{$val->id}}'>
+            	        		@endif
+            	        		</div>
+            	        	</td>
+            	        	<td class='tooltwo' title='Click to Change Sale Type' ><span class="systemedit"  id="typeofsale|{{$val->id}}">{{ucfirst($val->typeofsale)}}</span></td>
+            	        	
+            	        	
+            	        	
+            	        	
+            	        	
+            	        	<td> 
+            	        		{{$val->sold_by}}
+            	        		@if(($sale2->ridealong_id!=0)&&(!empty($sale2->ridealong)))
+                            		<img src='{{URL::to('img/ride-along.png')}}' class='tooltwo' onclick="$('.raCom-{{$sale2->id}}').toggle();" title='This Sale was accompanied by {{$sale2->ridealong->firstname}} {{$sale2->ridealong->lastname}}  as a ridealong, Click to enter their split/commission' width=25px height=25px> @endif 
+            	        	</td>
+            	        
+            	        	<td><span class="edit tooltwo" title="Click to enter some notes for this sale" id="comments|{{$val->id}}">{{$val->comments}}</span></td>
+            	        	<td>
+            	        		@if(($val->status!="CANCELLED")&&($val->status!="TURNDOWN"))
+            	        		@if(!empty($sale2->invoice))
+            	        			@if(($sale2->invoice->status==0)&&($sale2->paid==0))
+            	        			<?php $lab = "important blackText";$ic="cus-cancel";?>
+            	        			@else
+            	        			<?php $lab="success blackText";$ic="cus-money";?>
+            	        			@endif
+
+            	        			<span class='label label-{{$lab}} special tooltwo revealDetails' data-type="invoice" data-id='{{$sale2->id}}' title="Click to View Invoice">
+            	        			<i class='{{$ic}} tooltwo' title='This sale has been attached to an invoice!  Click to View!'></i> {{strtoupper($sale2->invoice->status)}}</span>
+            	        		@else
+            	        			<span class='label label-inverse special tooltwo revealDetails' data-type="progress-side" data-id='{{$sale2->id}}' title='Click to view current Sale Progress'>No Invoice</span>
+            	        		@endif
+            	        		
+            	        		@endif
+            	        	</td>
+            	        	<td>  
+            	        		@if($val->payout==0)
+            	        		<?php $t="redText animated shake";?>
+            	        		@else 
+            	        		<?php $t="";?>
+            	        		@endif
+            	        		@if(($val->status!="CANCELLED")&&($val->status!="TURNDOWN"))
+            	        		@if(!empty($sale2->ridealong)) <span class='small'>1st Rep :</span> @endif 
+            	        		<span class="edit tooltwo label label-inverse {{$t}} payoutField-{{$val->id}}" data-id="{{$val->id}}" title="Click to enter a Commission payment for {{$val->sold_by}}" id="payout|{{$val->id}}">@if(!empty($val->payout)){{number_format($val->payout,2,'.','')}}@endif</span>
+            	        		
+            	        		@if(($sale2->ridealong_id!=0)&&(!empty($sale2->ridealong)))
+            	        		<div class="animated fadeInUp raCom raCom-{{$sale2->id}}">
+            	        		
+            	        		@if($val->ridealong_payout==0)
+            	        		<?php $t="redText";?>
+            	        		@else 
+            	        		<?php $t="";?>
+            	        		@endif
+            	        		<span class='small'>2nd Rep :</span>
+            	        		<span class=" edit tooltwo label label-inverse {{$t}} ridealong_payoutField-{{$val->id}}" data-id="{{$val->id}}"  title="Click to enter a Commission split for {{$sale2->ridealong->firstname}} {{$sale2->ridealong->lastname}} this deal" id="ridealong_payout|{{$val->id}}">@if(!empty($val->ridealong_payout)){{number_format($val->ridealong_payout,2,'.','')}}@endif</span>
+            	        		</div>
+            	        		@endif
+            	        		@endif
+            	        	</td>
+
+            	        	<td><span class="edit tooltwo" title="Click to enter the Retail price of this deal" id="price|{{$val->id}}">@if(!empty($val->price)){{number_format($val->price,2,'.','')}}@endif</span></td>
+            	        	<td>  
+            	        		
+            	        	<button title='Click here to Upload'  class='tooltwo bordbut btn btn-mini btn-primary uploadDoc' data-lid='{{$val->lead_id}}' data-id='{{$val->id}}'><i class='icon-file'></i> Upload </button>
+
+            	        		@if(count($sale2->docs)>=1)
+            	        		<span  title='Click here to View Files' class='tooltwo viewDoc bordbut badge badge-important special' data-id='{{$val->id}}'  data-name='{{$val->cust_name}}' data-type='{{ucfirst($val->typeofsale)}}' style='cursor:pointer'><i class='icon-eye-open'></i>
+            	        		</span>
+            	        		@endif
+
+            	        		<br/>
+            	        		<input type="checkbox" data-theid="{{$val->id}}" class="markpaid tooltwo" title="Click to mark that you have the original documents on hand, and not just digital copies" data-id="conf|{{$val->id}}" @if($val->conf==1) checked='checked' @endif />
+            	        		<span class='checkboxAcceptance @if($val->conf==1) blackText @else redText @endif 
+            	        			'>Originals </span>
+            	        	</td>
+            	    	</tr>
+
+            	    	@endforeach
+	
+</table>
+@endif
+@endif
+<script>
+$(document).ready(function(){
+
+	function replaceRow(id){
+ 		var html = "";
+ 		$.getJSON('{{URL::to("sales/getsalerow/")}}'+id, function(data){
+ 			var sale = data.sale.attributes;
+ 			var accept;
+ 			if((sale.payment=="VISA")||(sale.payment=="MasterCard")||(sale.payment=="AMEX")){
+ 				accept = 'Accepted';
+ 			} else if((sale.payment=="JP")||(sale.payment=="Lendcare")){
+ 				accept = 'Funded';
+ 			} else {
+ 				accept = 'Paid';
+ 			}
+ 			if(sale.funded==0){
+ 				newClass='redText';
+ 				$('#funded-'+sale.id).prop('checked', false);
+ 			} else {
+ 				newClass='blackText';
+ 				$('#funded-'+sale.id).prop('checked', true);
+ 			}
+ 			$('.payAccept-'+sale.id).show().addClass(newClass).html(accept); 
+ 			$('#funded-'+sale.id).show();
+ 			$('.status-'+sale.id).html(sale.status);
+ 			if(sale.payout!="0.00"){$('.payoutField-'+sale.id).removeClass('redText');} else {$('.payoutField-'+sale.id).addClass('redText');}
+ 			if(sale.ridealong_payout!="0.00"){$('.ridealong_payoutField-'+sale.id).removeClass('redText');} else {$('.ridealong_payoutField-'+sale.id).addClass('redText');}
+
+ 			progress=0;
+                 
+                  if(sale.payment){progress++; }
+                  if((sale.defone)||(sale.deftwo)||(sale.maj)||(sale.att)){progress++;}
+                  if(sale.payout!="0.00"){progress++;}
+                  if((sale.payout=="0.00")&&(sale.ridealong_payout!="0.00")){progress++;}
+                                 
+                     if((sale.docs)||(sale.conf==1)){progress++;}
+                     if(sale.funded==1){progress++; }
+                     if(sale.status=="unpaid"){progress++;}
+                     if(sale.status=="paid"){progress++;};
+                     
+                     p="progress-success active";
+                     if(progress<=1){p = "progress-danger active";} 
+                     if(progress<=2){p = "progress-warning active";} 
+                     if((progress>2)&&(progress<=4)){p = "active";} 
+                     progress=Math.floor(((progress/7)*100));
+
+ 			$('.progID-'+sale.id).addClass(p).css('width',progress+'%');
+ 			toastr.success("Sale updated to "+progress+"%", "Sale Updated!");
+ 			//TODO PERCENTAGE UPDATE
+
+ 			var d = data;
+ 			var mach1, mach2;
+ 			var defone1 = d.defone;
+ 			var deftwo1=d.deftwo;
+ 			var att1 = d.att;
+ 			var maj1 = d.maj;
+ 			if((d.status=='CANCELLED')||(d.status=='TURNDOWN')){
+
+ 			if(d.pickedup==0){
+ 			mach1 = "<center><span class='label label-important'>";
+ 			mach2 = "</span></a></center>  ";
+ 			$('tr#rowid-'+d.id).removeClass().addClass(d.status);
+			$('#pickup-'+id).html("<a class='btn bordbut btn btn-mini btn-success pickupSale' data-id='"+d.id+"' style='color:#000;'>RETURN</a>");
+ 			} else {
+
+ 			$('#pickup-'+id).html("");
+ 			$('tr#rowid-'+d.id).removeClass().addClass('finishcancel');
+ 			mach1 = "<center><span class='label'>";
+ 			mach2 = "</span></a></center>  ";
+			} 
+			} else {
+			$('#pickup-'+id).html("");
+			if((d.status=="PAID")||(d.status=="COMPLETE")){
+			
+				$('tr#rowid-'+d.id).removeClass().addClass(d.status);
+			} else {
+				$('tr#rowid-'+d.id).removeClass();
+			}
+			
+			
+			}
+
+ 			
+ 		});
+
+ 	}
+
+ 	$('.edit').editable('{{URL::to("sales/edit")}}',{
+		submit:'OK',
+    		indicator : 'Saving...',
+    		width:'100px',
+    		placeholder:"..................",
+    		callback : function(value, settings) {
+    	    	
+    		}
+	});
+
+	$('.statusedit').editable('{{URL::to("sales/edit")}}',{
+		data : '{"APPROVAL":"Waiting Approval","COMPLETE":"Completed","CANCELLED":"Cancelled","TURNDOWN":"Turndown","RETURN":"Return"}',
+		type:'select',
+		submit:'OK',
+    		indicator : 'Saving...',
+    		placeholder:"..................",
+    		callback : function(value, settings) {
+    	      replaceRow($(this).data('id'));
+     	}
+    	});
+    	$('.termsedit').editable('{{URL::to("sales/edit")}}',{
+		data : '{"NA":"NA","30day":"30 Day","3month":"3 Month","6month":"6 Month"}',
+		type:'select',
+		submit:'OK',
+    		indicator : 'Saving...',
+    		placeholder:"..................",
+    		width:'50',
+    		callback : function(value, settings) {
+    	     
+     	}
+    	});
+
+    	$('.pay_typedit').editable('{{URL::to("sales/edit")}}',{
+		data : '{"NA":"NA","APP A":"APP A","APP B":"APP B","APP C":"APP C","APP E":"APP E","CREDITCARD": "Credit Card","CHEQUE":"Cheque","CASH":"Cash"}',
+		type:'select',
+		submit:'OK',
+    		indicator : 'Saving...',
+    		placeholder:".......",
+    		width:'20px',
+    		callback : function(value, settings) {
+    	     
+     	}
+    	});
+
+    		$('.paymentedit').editable('{{URL::to("sales/edit")}}',{
+		data : '{"Lendcare":"Lendcare","JP":"JP","VISA":"Visa","MasterCard":"MasterCard","AMEX":"American Express","CHQ":"Cheque","CASH":"Cash"}',
+		type:'select',
+		submit:'OK',
+    		indicator : 'Saving...',
+    		placeholder:"..................",
+    		callback : function(value, settings) {
+    		replaceRow($(this).data('id'));
+      }
+    	});
+
+	$('.systemedit').editable('{{URL::to("sales/edit")}}',{
+		data : '{"defender":"Defender","2defenders":"2 Defenders","3defenders":"3 Defenders","majestic":"Majestic","system":"System","supersystem":"Super System","megasystem":"Mega System","novasystem":"Nova System"}',
+		type: 'select',
+		submit:'OK',
+		indicator: 'saving',
+		callback: function(value, settings){
+		
+	}
+	});
+
+	$(document).on('click','.markpaid',function(){
+		var id = $(this).data('id');
+		var therow = $(this).data('theid');
+		var funded = $(this).data('funded');
+		t = $(this);
+		if($(this).is(":checked")){
+			var value=1;
+			$('#fundedbutton-'+funded).removeClass('btn-danger').addClass('btn-success');
+			t.next().removeClass('redText').addClass('blackText');
+		} else {
+			$('#fundedbutton-'+funded).removeClass('btn-success').addClass('btn-danger');
+			var value=0;
+			$('tr#rowid-'+therow).removeClass('PAID');
+			t.next().removeClass('blackText').addClass('redText');
+		}
+		
+		$.get('{{URL::to("sales/edit")}}',{id:id,value:value},function(data){
+		if(data==1) {
+			if(($('tr#rowid-'+therow).hasClass('completed'))||($('tr#rowid-'+therow).hasClass('finishcancel'))||($('tr#rowid-'+therow).hasClass('CANCELLED'))){
+				} else {
+				$('tr#rowid-'+therow).removeClass().addClass('PAID');
+			}
+		} else if(data==2) {
+			toastr.success('You received original documents instead of uploads.','CHECKED ORIGINALS RECEIVED');
+		};
+		});
+		
+	});
+	
+});
+
+</script>
+@endif

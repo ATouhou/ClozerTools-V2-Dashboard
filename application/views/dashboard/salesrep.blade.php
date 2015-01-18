@@ -1,0 +1,308 @@
+@layout('layouts/main')
+@section('content')
+<script>
+function showForm(){
+$('#teamstats').hide();
+$('#intro').hide();
+$('#stats').hide();
+$('#salestable').hide();
+$('#submitpayform').fadeIn(500);
+}
+
+function showTable(){
+$('#teamstats').hide();
+$('#intro').hide();
+$('#stats').hide();
+$('#submitpayform').hide();
+$('#salestable').fadeIn(500);
+}
+
+function showStats(){
+$('#teamstats').hide();
+$('#intro').hide();
+$('#submitpayform').hide();
+$('#salestable').hide();
+$('#stats').fadeIn(800);
+}
+</script>
+      
+<div id="main" role="main" class="container-fluid">
+      <div class="contained">
+            <!-- aside -->  
+            <aside> 
+                  @render('layouts.managernav')
+                  <!-- aside item: Menu -->
+                  @render('sidewidgets.leftside')
+            </aside>
+
+            <div id="page-content">
+                   
+                  <div class="fluid-container">
+                  	<div class="row-fluid">
+                    	@if(!empty($stats))
+                       	<h3 style="margin-top:-5px;">Your Stats This Month</h3>
+                            	<div class="largestats  end">
+                                	<span class="bignum2 BOOK">{{$stats['stats']['puton']}}</span><br/>
+                                	<h5>Puton</h5>
+                            	</div>
+                            	<div class="largestats end ">
+                                	<span class="bignum2 DNS2">{{$stats['stats']['dns']}}</span><br/>
+                                	<h5>DNS</h5>
+     	                       	</div>
+                            	<div class="largestats end ">
+                                	<span class="bignum2 RECALL">{{$stats['stats']['nq']}}</span><br/>
+                                	<h5>NQ</h5>
+                            	</div>
+                            	<div class="largestats end">
+                                	<span class="bignum2 SOLD">{{$stats['stats']['sales']}}</span><br/>
+                                	<h5>SOLD</h5>
+                            	</div>
+                              <div class="largestats end">
+                                	<span class="bignum2 PUTON">{{$stats['stats']['units']}}</span><br/>
+                                	<h5>UNITS SOLD</h5>
+                            	</div>
+                            	
+                            	<div class="largestats " style="margin-left:100px;">
+                                	<span class="bignum2 SOLD">@if(!empty($sales))${{$sales[0]->price}}@endif</span><br/>
+                                	<h5>GROSS SALES</h5>
+                            	</div>
+                            	<div class="largestats" >
+                                	<span class="bignum2 SOLD">@if(!empty($sales))${{$sales[0]->payout}}@endif</span><br/>
+                                	<h5>NET COMMISSION</h5>
+                            	</div>
+                        
+                        @endif
+                    	</div>
+                    	<br/>
+                     
+                       	<div class="row-fluid" id="specialistbox" >
+                                
+                        	<div class="jarviswidget black"  data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
+                                    <header>
+                                          <h4 style="margin-top:8px;">PURE OPPORTUNITY PROGRAM</h4>                           
+                                    </header>
+                                        	<div>
+                                          <div class="inner-spacer fancyback span12" style="padding-bottom:40px;"> 
+                              			<div class="span5" style="margin-bottom:20px;">
+                              				<?php if(Auth::user()->level==1){$level="i";} else if(Auth::user()->level==2){$level="ii";} else if(Auth::user()->level==3){$level="iii";} else if(Auth::user()->level==4){$level="iv";} else {$level = "V";}?>
+                              				<h3  class="animated flipInY">
+                              					You have achieved level : <span class="bignum2">{{$level}}</span>
+                              				&nbsp;&nbsp;</h3>
+                              				<h5 style="margin-bottom:20px;">YOUR COMMISSION STRUCTURE</h5>
+
+                              					<div class="animated fadeInUp span2 pureopbox">
+                              						Defender
+                              						<img src="{{URL::to_asset('images/pureop-def.png')}}">
+                              						<span class="label label-success special">${{$pureop[0]->defendercom}}.00</span>
+                              					</div>
+                              					<div class="animated fadeInUp span2 pureopbox">
+                              						Majestic
+                              						<img src="{{URL::to_asset('images/pureop-maj.png')}}">
+                              						<span class="label label-success special">${{$pureop[0]->majesticcom}}.00</span>
+                              					</div>
+                              					<div class="animated fadeInUp span2 pureopbox">
+                              						System
+                              						<img src="{{URL::to_asset('images/pureop-sys.png')}}">
+                              						<span class="label label-success special">${{$pureop[0]->systemcom}}.00</span>
+                              					</div>
+                              					<div class="animated fadeInUp span2 pureopbox">
+                              						Super
+                              						<img src="{{URL::to_asset('images/pureop-super.png')}}">
+                              						<span class="label label-success special">${{$pureop[0]->supercom}}.00</span>
+                              					</div><br>
+                             				</div>
+
+                              				<div class=" specialist animated flipInX @if(Auth::user()->level!=1) grey @else highlight @endif  ">
+                              				      <img @if(Auth::user()->level==1) class="animated shake" @endif src="{{URL::to_asset('images/level1.png')}}">
+                              				</div>
+                              				<div class=" specialist animated flipInX @if(Auth::user()->level!=2) grey @else highlight @endif  ">
+                              				      <img @if(Auth::user()->level==2) class="animated shake" @endif src="{{URL::to_asset('images/level2.png')}}">
+                              				</div>
+                              				<div class=" specialist animated flipInX @if(Auth::user()->level!=3) grey @else highlight @endif  ">
+                              				      	<img @if(Auth::user()->level==3) class="animated shake" @endif src="{{URL::to_asset('images/level3.png')}}">
+                              				</div>
+                              				 <div class=" specialist animated flipInX @if(Auth::user()->level!=4) grey @else highlight @endif ">
+                              				 	<img @if(Auth::user()->level==4) class="animated shake" @endif src="{{URL::to_asset('images/level4.png')}}">
+                              				 </div>
+                              				<div class=" specialist animated flipInX @if(Auth::user()->level!=5) grey @else highlight @endif   ">
+                              					<img @if(Auth::user()->level==5) class="animated shake" @endif src="{{URL::to_asset('images/level5.png')}}">
+                              				</div>
+                              			<div class="span4">
+                              					<h5>TO REACH NEXT LEVEL</h5>
+                              					{{$pureop[0]->info}}
+                              			</div>
+                              			&nbsp;&nbsp;
+                              			<button class="btn btn-default pureopinfo" style="float:right;margin-right:40px;">
+                              				<i class="cus-money-dollar"></i>&nbsp;VIEW LEVEL {{Auth::user()->level}} INFO
+                              			</button>
+                                          
+
+                                            	<div class="span12" id="pureopinfo" style="height:800px;display:none;">
+                                            		<img src="{{URL::to_asset('images/PureOpProgram.png')}}" style="margin-left:-80px;width:98%;">
+                                            	</div>
+                                          </div>
+                                        	</div>
+                        	</div>
+                        </div>
+
+
+                      	
+                    	<div class="row-fluid well" >
+                    		<div class="span6">
+                    			@if(!empty($salebytype))
+	               				<div id="container"></div>
+                    			@else 
+                    				<h4 style="margin-left:80px;margin-top:150px;">Not Enough Data to Display Chart</h4>
+                    			@endif
+                    		</div>
+                    
+                      		<div class="span6" style="border-left:1px solid #1f1f1f;">
+                      			@if(!empty($stats))
+                    				<div id="container3"></div>
+                    			@else 
+                    				<h4 style="margin-left:80px;margin-top:150px;">Not Enough Data to Display Chart</h4>
+                    			@endif
+                    		</div>
+                    	</div>
+                  </div>   
+            </div>
+
+            <aside class="right">
+
+                 	<h4>YOU ARE LEVEL <strong style="color:#fff;">{{Auth::user()->level}}</strong>&nbsp;&nbsp;SPECIALIST</h4>
+               	<center>
+               		<img class="animated fadeInUp" src="{{URL::to_asset('images/')}}level{{Auth::user()->level}}.png" style="width:80%">
+               	<a href="{{URL::to('sales/invoice')}}">
+               		<button class="btn btn-large btn-primary">
+               			VIEW YOUR SALES
+               		</button>
+               	</a>
+
+
+               	</center>
+               	<hr>
+               	<h4>Team Performance This Month</h4><hr>
+        	 		@if(!empty($podiummonth['reps']))
+				@foreach($podiummonth['reps'] as $val)
+				<strong style="color:#fff;">{{$val->rep_name}}</strong><strong class="pull-right">Units : <span style="color:lime;">{{$val->units}}</span></strong>
+              		<div class="progress progress-success slim"><div class="bar" data-percentage="{{$val->units}}"></div></div>
+              	<div class="topstats" ><font color=lime>SOLD : {{$val->sold}}</font> &nbsp;&nbsp;|&nbsp;&nbsp;  <font color=red>DNS : {{$val->dns}}</font>&nbsp;&nbsp;|&nbsp;&nbsp; CLOSE : {{number_format($val->close,2,'.','')}}%</strong> </div>
+            
+        	 @endforeach
+             @endif 
+
+               	<div class="divider"></div>
+
+           	</aside>
+      </div>
+</div>
+
+<div class="push"></div>
+
+<script src="{{URL::to_asset('js/include/gmap3.min.js')}}"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
+<script src="{{URL::to_asset('js/highcharts.js')}}"></script>
+<script src="{{URL::to_asset('js/include/guage.min.js')}}"></script>
+
+<?php foreach($stats['chart'] as $key=>$val){
+if($val[0]=="UNITS"){
+unset($stats['chart'][$key]);
+};
+};
+
+?>
+@if(!empty($salebytype))&&(!empty($stats['chart'][2][1]!=0)))
+<script>
+$(function () {
+	Highcharts.setOptions({
+     		colors: ['#00CC66', '#009933', '#669999', '#000000', '#FF0000', '#993366', '#FFCC00']
+    	});
+		
+      $('#container').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'YOUR SALES BY TYPE THIS MONTH',
+                 style:{color: '#3E576F',
+				fontSize:'14px'}
+            },
+            tooltip: {
+        	    pointFormat: 'Type Count: <b>{point.y}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'System Type Percentage',
+                data: {{json_encode($salebytype)}}
+            }]
+        });
+    });
+
+$(function () {
+    	Highcharts.setOptions({
+     		colors: ['#00CC66', '#009933', '#669999', '#000000', '#FF0000', '#993366', '#FFCC00']
+    	});
+
+      $('#container3').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'YOUR APPOINTMENT RESULTS FOR MONTH',
+                 style:{color: '#3E576F',
+				fontSize:'14px'}
+            },
+            tooltip: {
+        	    pointFormat: 'Appointments: <b>{point.y}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Lead Percentage',
+                data: {{json_encode($stats['chart'])}}
+            }]
+        });
+    });
+</script>
+@endif
+<script>
+$(document).ready(function(){
+$('.pureopinfo').click(function(){
+$('#pureopinfo').toggle(300);
+});
+});
+</script>
+@endsection
+
+

@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>Bookshelf Slider Help Documentation - jQuery Plugin</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<!-- load styles -->
+<link rel="stylesheet" type="text/css" href="assets/css/bookshelf_slider_help.css" />
+
+<style type="text/css"></style>
+
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <h1>Bookshelf Slider jQuery Plugin - v1.1</h1>
+    
+    Author: Sergio Valle
+    <br />
+    Date released: Mar 26, 2012
+    <br /><br />
+	<span id="result_box" lang="en">Thank you for purchasing this plugin. <br />
+	<span id="result_box2" lang="en">If you have any questions that are not specified here</span>, please feel free to email</span> me through my codecanyon user profile / contact form &gt;&gt; <a href="http://codecanyon.net/user/srvalle" target="_blank">srvalle</a>
+  <div class="space_hr"></div>
+    
+	<h4>Bookshelf Slider Help documentation</h4>
+    
+    
+
+	<div id="table_content">
+	  <h3><strong>Table of Contents</strong></h3>
+  		<ol class="alpha">
+			<li><a href="#setup">Setup</a></li>
+			<li><a href="#parameters">Parameters</a></li>
+			<li><a href="#screenshots">Screenshots</a></li>
+			<li><a href="#credits">Credits</a></li>
+		</ol>
+		
+		<div class="space_hr"></div>
+        
+</div>
+    
+    <div id="setup">
+    	<h3>Setup</h3>
+    	Include the following javascript and css code into HEAD section of the page. <br />
+    	If you have any questions, see how to insert javascript and css in the samples files. ( ex_mix.html, ex_widget_style.html ... )
+        
+		<div class="sections_content">
+
+<pre style='color:#000000;background:#ffffff;'><span style='color:#808030; '>&lt;</span><span style='color:#800000; font-weight:bold; '>link</span> rel<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>stylesheet</span><span style='color:#800000; '>"</span> type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>text/css</span><span style='color:#800000; '>"</span> href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>css/bookshelf_slider.css</span><span style='color:#800000; '>"</span> <span style='color:#808030; '>/</span><span style='color:#808030; '>></span>
+<span style='color:#808030; '>&lt;</span><span style='color:#800000; font-weight:bold; '>link</span> rel<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>stylesheet</span><span style='color:#800000; '>"</span> type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>text/css</span><span style='color:#800000; '>"</span> href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>css/skin01.css</span><span style='color:#800000; '>"</span> <span style='color:#808030; '>/</span><span style='color:#808030; '>></span>
+
+<span style='color:#808030; '>&lt;</span>script type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>text/javascript</span><span style='color:#800000; '>"</span> src<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>js/jquery-1.7.min.js</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>script<span style='color:#808030; '>></span>
+<span style='color:#808030; '>&lt;</span>script type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>text/javascript</span><span style='color:#800000; '>"</span> src<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>js/jquery.easing.1.3.js</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>script<span style='color:#808030; '>></span>
+<span style='color:#808030; '>&lt;</span>script type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>text/javascript</span><span style='color:#800000; '>"</span> src<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>js/jquery.bookshelfslider.min.js</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>script<span style='color:#808030; '>></span>
+</pre>
+        
+        </div>
+        
+        To initiate the plugin enter the code below (with and without parameters) into HEAD or BODY section of the page
+        <div class="sections_content">
+        
+<pre style='color:#000000;background:#ffffff;'><span style='color:#808030; '>&lt;</span>script type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>text/javascript</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+
+jQuery<span style='color:#808030; '>(</span>document<span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>ready<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>function</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+
+    <span style='color:#696969; '>// basic form, without parameters</span>
+    $<span style='color:#808030; '>.</span>bookshelfSlider<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'#bookshelf_slider'</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    
+<span style='color:#800080; '>}</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span><span style='color:#696969; '>//ready</span>
+
+<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>script<span style='color:#808030; '>></span>
+</pre>
+        
+        </div>
+        
+        <div class="sections_content">
+
+
+<pre style='color:#000000;background:#ffffff;'><span style='color:#808030; '>&lt;</span>script type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>text/javascript</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+
+jQuery<span style='color:#808030; '>(</span>document<span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>ready<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>function</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+    
+    <span style='color:#696969; '>//define custom parameters</span>
+    $<span style='color:#808030; '>.</span>bookshelfSlider<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'#bookshelf_slider'</span><span style='color:#808030; '>,</span> <span style='color:#800080; '>{</span>
+        <span style='color:#0000e6; '>'item_width'</span><span style='color:#800080; '>:</span> <span style='color:#008c00; '>635</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'item_height'</span><span style='color:#800080; '>:</span> <span style='color:#008c00; '>320</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'products_box_margin_left'</span><span style='color:#800080; '>:</span> <span style='color:#008c00; '>30</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'product_title_textcolor'</span><span style='color:#800080; '>:</span> <span style='color:#0000e6; '>'#ffffff'</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'product_title_bgcolor'</span><span style='color:#800080; '>:</span> <span style='color:#0000e6; '>'#c33b4e'</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'product_margin'</span><span style='color:#800080; '>:</span> <span style='color:#008c00; '>30</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'product_show_title'</span><span style='color:#800080; '>:</span> <span style='color:#0f4d75; '>true</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'show_title_in_popup'</span><span style='color:#800080; '>:</span> <span style='color:#0f4d75; '>true</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'show_selected_title'</span><span style='color:#800080; '>:</span> <span style='color:#0f4d75; '>true</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'show_icons'</span><span style='color:#800080; '>:</span> <span style='color:#0f4d75; '>true</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'buttons_margin'</span><span style='color:#800080; '>:</span> <span style='color:#008c00; '>15</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'buttons_align'</span><span style='color:#800080; '>:</span> <span style='color:#008c00;'>'center'</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'slide_duration'</span><span style='color:#800080; '>:</span> <span style='color:#008c00; '>1000</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'slide_easing'</span><span style='color:#800080; '>:</span> <span style='color:#0000e6; '>'easeInOutExpo'</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'arrow_duration'</span><span style='color:#800080; '>:</span> <span style='color:#008c00; '>800</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'arrow_easing'</span><span style='color:#800080; '>:</span> <span style='color:#0000e6; '>'easeInOutExpo'</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'video_width_height'</span><span style='color:#800080; '>:</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>500</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>290</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span>
+        <span style='color:#0000e6; '>'iframe_width_height'</span><span style='color:#800080; '>:</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>500</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>330</span><span style='color:#808030; '>]</span>
+        <span style='color:#800080; '>}</span>
+    <span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    
+<span style='color:#800080; '>}</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span><span style='color:#696969; '>//ready</span>
+
+<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>script<span style='color:#808030; '>></span>
+</pre>
+        
+        </div>
+        
+		<p>Below is a simple HTML of example. Please see the full HTML in the example files (  ex_mix.html, ex_widget_style.html ... ). In the example files you'll see the HTML, javascript and css together. <span id="result_box6" lang="en" xml:lang="en">And also how to add video (youtube and vimeo), enlarged photo and iframe html content</span>. </p>
+	  <p><strong>IMPORTANT INFORMATIONS:</strong></p>
+      - You must set the width and height of each image (thumbnail). The code will calculate the position of the product according to its size.<br />
+      - The "title" attribute is optional. You can leave the value empty if you do not want to use the title.<br />
+      - Each group of products must have a unique ID in sequence. For example: Group1 > id="products_box_1" --- Group2 > id="products_box_2" --- Group3 > id="products_box_3". See below on PANEL SLIDER<br />
+      - You must set the id of each button (PANEL BAR). For example: id="btn1" id="btn2" id="btn3" etc.<br />
+      
+      <br />
+      <strong>Setting the attributes data:</strong> data-type="value" | data-popup="value" | data-url="value"
+      <br /><br />
+      - data-type="value"<br />
+      This attribute is used to insert an image overlay effect. Options: <strong>book, magazine, dvd, cd</strong>. If you do not want to use any of these effects just leave it blank. e.g. data-type=""
+      
+      <br /><br />
+      - data-popup="value"<br />
+      Show or not the popup div. Options: <strong>true / false</strong>
+      
+       <br /><br />
+      - data-url="value"<br />
+      Shows the content inside the popup. Can be a Larger Image, video (Youtube or Vimeo) and HTML content. Leave empty if you do not want to use these options. The icons (zoom, play, content, link) are inserted according to the chosen value. <br />If the value chosen for the following: <strong>data-url="http://www.youtube.com/watch?v=C05pGnZQQtE"</strong>. Then will appear the "Play" icon on the thumbnail. If the "data-popup" is set to True, the video opens in the popup. If the "data-popup" is set to False, the "Link" icon appears and opens the video on Youtube site.
+      
+<div class="sections_content">
+  
+  // PANEL TITTLE
+  
+  <pre style='color:#000000;background:#ffffff;'><span style='color:#808030; '>&lt;</span>div class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>panel_title</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+    <span style='color:#808030; '>&lt;</span>div id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>selected_title_box</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span>div id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>selected_title</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>Selected Title<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>div<span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>div<span style='color:#808030; '>></span>
+    
+    <span style='color:#808030; '>&lt;</span>div id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>menu_top</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+        <span style='color:#808030; '>&lt;</span>ul<span style='color:#808030; '>></span>
+            <span style='color:#808030; '>&lt;</span>li id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>show_hide_titles</span><span style='color:#800000; '>"</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>menutop_btn</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span>a href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>#</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>Titles<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>a<span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>li<span style='color:#808030; '>></span>
+            <span style='color:#808030; '>&lt;</span>li id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>show_hide_icons</span><span style='color:#800000; '>"</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>menutop_btn</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span>a href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>#</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>Icons<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>a<span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>li<span style='color:#808030; '>></span>
+        <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>ul<span style='color:#808030; '>></span>
+    <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>div<span style='color:#808030; '>></span>
+
+<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>div<span style='color:#808030; '>></span>
+</pre>
+
+<br />
+// PANEL SLIDER
+
+<br /><br />
+//slide 1
+<pre style='color:#000000;background:#ffffff;'><span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>slide_animate</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+    <span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>products_box</span><span style='color:#800000; '>"</span> id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>products_box_1</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+
+        <span style='color:#808030; '>&lt;</span>a href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>#</span><span style='color:#800000; '>"</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>product</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>magazine</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>popup<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>true</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>url<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/magazine_large1.jpg</span><span style='color:#800000; '>"</span> title<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>info</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+             <span style='color:#808030; '>&lt;</span>img src<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/magazine1.png</span><span style='color:#800000; '>"</span> alt<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#800000; '>"</span> width<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>76</span><span style='color:#800000; '>"</span> height<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>108</span><span style='color:#800000; '>"</span> <span style='color:#808030; '>/</span><span style='color:#808030; '>></span>
+        <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>a<span style='color:#808030; '>></span>
+
+        <span style='color:#808030; '>&lt;</span>a href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>#</span><span style='color:#800000; '>"</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>product</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>magazine</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>popup<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>true</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>url<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/magazine_large2.jpg</span><span style='color:#800000; '>"</span> title<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>info</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+             <span style='color:#808030; '>&lt;</span>img src<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/magazine2.png</span><span style='color:#800000; '>"</span> alt<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#800000; '>"</span> width<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>71</span><span style='color:#800000; '>"</span> height<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>100</span><span style='color:#800000; '>"</span> <span style='color:#808030; '>/</span><span style='color:#808030; '>></span>
+        <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>a<span style='color:#808030; '>></span>
+
+    <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span>
+<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span>
+</pre>
+
+<br />
+
+
+//slide 2
+<pre style='color:#000000;background:#ffffff;'><span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>slide_animate</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+    <span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>products_box</span><span style='color:#800000; '>"</span> id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>products_box_2</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+
+        <span style='color:#808030; '>&lt;</span>a href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>#</span><span style='color:#800000; '>"</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>product</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>book</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>popup<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>true</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>url<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/book_large.jpg</span><span style='color:#800000; '>"</span> title<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>info</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+             <span style='color:#808030; '>&lt;</span>img src<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/book.png</span><span style='color:#800000; '>"</span> alt<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#800000; '>"</span> width<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>81</span><span style='color:#800000; '>"</span> height<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>107</span><span style='color:#800000; '>"</span> <span style='color:#808030; '>/</span><span style='color:#808030; '>></span>
+        <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>a<span style='color:#808030; '>></span>
+
+        <span style='color:#808030; '>&lt;</span>a href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>#</span><span style='color:#800000; '>"</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>product</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>cd</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>popup<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>true</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>url<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/cd_large.jpg</span><span style='color:#800000; '>"</span> title<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>info</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+             <span style='color:#808030; '>&lt;</span>img src<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/cd.png</span><span style='color:#800000; '>"</span> alt<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#800000; '>"</span> width<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>80</span><span style='color:#800000; '>"</span> height<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>80</span><span style='color:#800000; '>"</span> <span style='color:#808030; '>/</span><span style='color:#808030; '>></span>
+        <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>a<span style='color:#808030; '>></span>
+
+        <span style='color:#808030; '>&lt;</span>a href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>#</span><span style='color:#800000; '>"</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>product</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>type<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>dvd</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>popup<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>true</span><span style='color:#800000; '>"</span> data<span style='color:#808030; '>-</span>url<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/dvd_large.jpg</span><span style='color:#800000; '>"</span> title<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>info</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+             <span style='color:#808030; '>&lt;</span>img src<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>images/dvd.png</span><span style='color:#800000; '>"</span> alt<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#800000; '>"</span> width<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>77</span><span style='color:#800000; '>"</span> height<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>107</span><span style='color:#800000; '>"</span> <span style='color:#808030; '>/</span><span style='color:#808030; '>></span>
+        <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>a<span style='color:#808030; '>></span>
+
+    <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span>
+<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span>
+</pre>
+
+
+
+<br />
+// PANEL BAR
+
+<pre style='color:#000000;background:#ffffff;'><span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>panel_bar</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+    <span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>arrow_box</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>arrow_menu</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span>
+    <span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>button_items</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>
+        <span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>btn1</span><span style='color:#800000; '>"</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>button_bar</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span>a href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>javascript:void(0)</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>Books<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>a<span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span>
+        <span style='color:#808030; '>&lt;</span><span style='color:#603000; '>div</span> id<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>btn2</span><span style='color:#800000; '>"</span> class<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>button_bar</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span>a href<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>javascript:void(0)</span><span style='color:#800000; '>"</span><span style='color:#808030; '>></span>Magazines<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>a<span style='color:#808030; '>></span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span>
+    <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span>
+<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span><span style='color:#603000; '>div</span><span style='color:#808030; '>></span>
+</pre>
+        
+</div>
+        
+</div><!-- setup -->
+    
+    <div class="space_hr"></div>
+    
+    <div id="parameters">
+    	<h3>Parameters</h3>
+        
+        <div class="sections_content">
+          <table>
+            <tr>
+                <td class="td_parameter">item_width</td>
+                <td>This is the width of the slider panel and any width can be set. Adjust according to your layout.</td>
+            </tr>
+            <tr>
+                <td class="td_parameter">item_height</td>
+                <td>This is the height of the slider panel and any height can be set. Adjust according to your layout.</td>
+            </tr>
+            <tr>
+                <td class="td_parameter">products_box_margin_left</td>
+                <td>Set the left margin of the slider panel.</td>
+            </tr>
+            <tr>
+                <td class="td_parameter">product_title_textcolor</td>
+                <td>The text color of the product title.</td>
+            </tr>
+            <tr>
+                <td class="td_parameter">product_title_bgcolor</td>
+                <td>The background color of the product title.</td>
+            </tr>
+            <tr>
+                <td class="td_parameter">product_margin</td>
+                <td>Define the margin between each product.</td>
+            </tr>
+            <tr>
+                <td class="td_parameter">product_show_title</td>
+                <td>Show or not the product title. <br />
+                  Options: <strong>true / false</strong></td>
+            </tr>
+            <tr>
+              <td class="td_parameter">show_title_in_popup</td>
+              <td><span id="result_box3" lang="en" xml:lang="en">Show the title in the popup</span>. <br />
+              Options: <strong>true / false</strong><br /></td>
+              <td>            
+            </tr>
+            <tr>
+                <td class="td_parameter">show_selected_title</td>
+                <td>Show the text of the selected button. <br />
+                  Options: <strong>true / false</strong></td></td>
+            </tr>
+            <tr>
+              <td class="td_parameter">show_icons</td>
+              <td>Show or not the  icons. <br />
+Options: <strong>true / false</strong></td>
+            </tr>
+            <tr>
+              <td class="td_parameter">buttons_margin</td>
+              <td>The space between the menu buttons.</td>
+            </tr>
+            <tr>
+                <td class="td_parameter">buttons_align </td>
+                <td>Alignment of the menu buttons. <br />
+                Options: <strong>left, center and right</strong></td>
+            </tr>
+            <tr>
+                <td class="td_parameter">slide_duration</td>
+                <td>The transition time of each slide, in milliseconds.</td>
+            </tr>
+            <tr>
+                <td class="td_parameter">slide_easing</td>
+              <td>Set the slide transition effect.
+                <br />
+                <br />Options:<strong> 'jswing', 'easeInQuad', 'easeOutQuad', 'easeInOutQuad', 'easeInCubic', 'easeOutCubic', 'easeInOutCubic', 'easeInQuart', 'easeOutQuart', 'easeInOutQuart', 'easeInQuint', 'easeOutQuint', 'easeInOutQuint', 'easeInSine', 'easeOutSine', 'easeInOutSine', 'easeInExpo', 'easeOutExpo', 'easeInOutExpo', 'easeInCirc', 'easeOutCirc', 'easeInOutCirc', 'easeInElastic', 'easeOutElastic', 'easeInOutElastic', 'easeInBack', 'easeOutBack', 'easeInOutBack', 'easeInBounce', 'easeOutBounce', 'easeInOutBounce'</strong></td>
+            </tr>
+            <tr>
+                <td class="td_parameter">arrow_duration</td>
+                <td>The transition time of the arrow, in milliseconds.</td>
+            </tr>
+            <tr>
+                <td class="td_parameter" style="border:none">arrow_easing</td>
+                <td style="border:none">Set the arrow transition effect. ( The options are the same as <strong>slide_easing</strong> )</td>
+            </tr>
+            <tr>
+              <td class="td_parameter" style="border:none">video_width_height</td>
+              <td style="border:none"><span id="result_box4" lang="en" xml:lang="en">Sets the width and height of video (youtube and vimeo)</span>. <br />                
+              Array: <strong>[width_value, height_value]</strong><br /></td>
+            </tr>
+            <tr>
+              <td class="td_parameter" style="border:none">iframe_width_height</td>
+              <td style="border:none"><span id="result_box5" lang="en" xml:lang="en">Sets the default width and height of the iframe. The size of the iframe can also be configured in the url. example:</span> ... href=&quot;content/iframe_content.html?size=450x330&quot; ...<br />
+              Array: <strong>[width_value, height_value]</strong><br /></td>
+            </tr>
+    
+          </table>
+    	</div>
+    </div><!-- parameters -->
+    
+  <div class="space_hr"></div>
+    
+    <div id="screenshots">
+    	<h3>Screenshots</h3>
+    
+    	<div class="sections_content">
+        	<p><img src="assets/images/screenshot.jpg" />
+      	  </p>
+        	<p><img src="assets/images/screenshot2.jpg" /></p>
+    	</div>
+ 
+    </div>
+    
+    <div class="space_hr"></div>
+    
+    <div id="credits">
+    	<h3>Credits</h3>
+    
+    	<div class="sections_content">
+       	Design and development by <a href="http://srvalle.com/" target="_blank">srvalle</a>
+        </div>
+ 
+    </div>
+
+    
+</div><!-- bookshelf_slider -->
+
+</body>
+</html>

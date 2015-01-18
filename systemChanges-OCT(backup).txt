@@ -1,0 +1,422 @@
+DONE -Numbers showing up early
+DONE - $weeksales variable change to weekSales
+DONE - U/sale wrong
+DONE - Referral file for each demo
+DONE - ADd new referral with referral search
+DONE - Add age to booking screen
+DONE - Add Referral script to all DB's
+DONE - Add referral info to booking screen
+DONE - Change the processsurvey to secondtier
+DONE - Referral file / entry base don lead
+DONE - Add referral_id to lead table in all DB's
+ALTER TABLE  `leads` ADD  `referral_id` INT( 8 ) NOT NULL AFTER  `quad_id`
+DONE - Add referral script type and script value
+ALTER TABLE  `scripts` CHANGE  `type`  `type` ENUM(  'booking',  'rebook',  'confirmation',  'door',  'scratch',  'objection',  'confrebook',  'ballot',  'homeshow',  'finalnotice',  'survey', 'referral' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
+INSERT INTO `scripts` (`id`, `type`, `title`, `script`, `created_at`, `updated_at`) VALUES (NULL, 'referral', 'Referral Script', 'This is the referral script', CURRENT_TIMESTAMP, '');
+DONE - Change booking screen to include second tier
+DONE - Change scripts to include second tier
+DONE - 
+ALTER TABLE  `leads` CHANGE  `leadtype`  `leadtype` ENUM(  'paper',  'door',  'homeshow',  'ballot',  'other',  'rebook',  'referral',  'finalnotice',  'coldcall',  'doorknock',  'personal',  'survey',  'secondtier' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
+DONE - Add referral to NEW lead entry, select lead
+DONE - Add secondtier leadtype to all DB's
+DONE - 
+Apply invoices to all DB's
+DONE -Change all foxvalley and cyclonic paper leads to secondtier
+
+DONE - Referral Notes to all places where referral goes
+DONE - Seperate call stats for surveys
+DONE - Check NQ for renters via survey
+DONE - Check for duplicate appointments 
+DONE - Check for duplicate appointments from booking screen
+DONE - Set goals for guages
+DONE - Add newgoaltype o all DBS
+DONE
+ALTER TABLE  `goals` CHANGE  `typeofgoal`  `typeofgoal` ENUM(  'weekly',  'monthly',  'weeklyunits',  'monthlyunits' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
+DONE
+INSERT INTO `goals` (`id`, `usertype`, `typeofgoal`, `goal`, `created_at`, `updated_at`) VALUES (NULL, 'salesrep', 'weeklyunits', '10', CURRENT_TIMESTAMP, ''), (NULL, 'salesrep', 'monthlyunits', '50', CURRENT_TIMESTAMP, '');
+DONE - Add new goal guages
+DONE - Add red button to view all unpaid invoices in system all at once
+DONe - 9:30am entry timne
+DONE - CXL demos on pureop is wrong
+DONE - RBTF is wrong
+DONE - Add NI, APP, NQ DNC etc per booker
+DONE - revup contest
+DONE - Add guage charts and line progress charts
+DONE
+Add expense_tags to all settings tables in DB's
+ALTER TABLE  `settings` ADD  `expense_tags` MEDIUMTEXT NOT NULL AFTER  `quick_pick_buttons`
+
+DONE
+Add expense tracking system
+DONE
+Add new expense
+DONE
+Delete expense
+DONE
+Add new category
+DONE - Scratch Card Page
+DONE - Include scratch card mailout in expenses
+DONE - Assign oldest leads first checkbox
+DONE - 
+UPDATE  `settings` SET  `expense_tags` =  'Scratch Cards, Gas, Hotels, Office Supplies, Food, Coffee, Phones, Internet, Rent' WHERE  `settings`.`id` =1;
+
+DONE - Add referral addition to app
+DONE - Add City tracking
+DONE - ADD user points to users table
+DONE - 
+Add default_map, map_settings to all settings DB
+ALTER TABLE  `settings` ADD  `default_map` ENUM(  'ROADMAP',  'HYBRID',  'SATELLITE' ) NOT NULL AFTER  `appointment_board_access`,
+ADD  `map_settings` ENUM(  'leftside',  'rightside',  'onlystreet',  'onlymap' ) NOT NULL AFTER  `default_map`
+DONE - All US sites switch from Canada411 to US 411.
+DONE - For every 10 Systems you sell, you will be awarded this achievement
+DONE - Move map into settings
+DONE - Default Satellite Hybrid
+DONE - Google Street View
+DONE - Maj/Def from Combo Systems
+DONE - Book from survey screen
+DONE - Now Script
+DONE - Upload Purus Air leads
+Upload FoxValleyleads
+DONE - Total office majestics 
+DONE - Total office inventory count
+DONE - Fix appointment times for Sam
+DONE - 
+ALTER TABLE  `scripts` CHANGE  `type`  `type` ENUM(  'booking',  'rebook',  'confirmation',  'door',  'scratch',  'objection',  'confrebook',  'ballot',  'homeshow',  'finalnotice',  'survey',  'referral',  'bookrightnow' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
+DONE - Add city profile page
+DONE - update all DB with StatsCan DB
+DONE - Fix Maj/Def on rev up contest
+DONE - Add button to set goals from dashboard
+DONE - City page with door reggie map
+DONE -City page open from anywhere
+DONE -Move city page to plugin
+DONE - Create city and include gifts when doing so.
+DONE - Remove mandatory gift when booking apps
+DONE - When creating cities from leads, also apply gifts
+DONE - Fix the city sort
+DOONE- Fix the lead sort
+DONE - 
+Add order to all gameification tables in all DBS
+ALTER TABLE  `gameification` ADD  `order` INT NOT NULL AFTER  `sql_query`
+ALTER TABLE  `game_users` ADD  `order` INT NOT NULL AFTER  `user_id`
+DONE - Change name from survey booking screen
+
+DONE - 
+ALTER TABLE  `users` ADD  `system_points` INT NOT NULL AFTER  `credits` ,
+ADD  `bronze_points` INT NOT NULL AFTER  `system_points` ,
+ADD  `silver_points` INT NOT NULL AFTER  `bronze_points` ,
+ADD  `gold_points` INT NOT NULL AFTER  `silver_points`
+
+DONE - 
+Insert Game History into all DB's
+DONE - Initiate Games on all DB's
+DONE - Change Games/Badges to own thing
+DONE - Points will be on user
+DONE - Add sales to profile
+DONE - Add sales stats to profile
+DOne - Add machine list to profile
+
+
+DONE - Add regional leaderboard
+DONE - Add regional sales leaderboard
+DONE - Unit leaderboard
+DONE - Close leaderboard
+DONE - integrate ajx requests for leaderboard
+DONE - apply podiums to leaderlist
+
+DONE
+Make leadboard an option
+Make podiums an option
+
+DONE
+add leaderboard and podium to settings tabls across DB
+DONE
+ALTER TABLE  `settings` ADD  `leaderboard` INT NOT NULL AFTER  `goal_type` ,
+ADD  `podium` INT NOT NULL AFTER  `leaderboard`
+DONE - Add appointment history to profile
+DONE - Add sales history to profile
+
+DONE -  Change GameHistory to not record name, retrieve name from user_id;
+DONE - Add notes to survey script
+DONE
+Ad setting to unassign leads automatically when assigning new ones
+DONE
+In all DB's
+ALTER TABLE  `settings` ADD  `auto_unassign` INT NOT NULL AFTER  `lead_secondtier`
+
+DONE - Seperate call stats on lead booking plugin
+DONE - Add selector to filter stats tables
+DONE - Add localStorage option to remember your sleection on refreshes
+
+
+
+
+DONe - 
+
+ALTER TABLE  `game_history` ADD  `user_type` VARCHAR( 200 ) NOT NULL AFTER  `type`
+
+
+DONE - Remove 2 systems from stats calculations for correct numbers across system
+DONE - Add marketing filterer to marketing stats on dashboard
+
+DONE - ClozerTools branding
+DONE - ClozerTools css file
+
+
+
+DONE - Assign all second tiers
+DONE - Fix excel salesjournal to include 2 systems
+
+DONE - Add sales rep to door reggie list
+DONe - Add buckets to booking screen when more than 1 lead type is assigned
+
+DONE - Fix time glitch on hiring manager
+
+DONE - Added buckets to booking page, so that you can assign multiple leads to booker, and they can choose which one they wanna use
+
+
+
+
+
+DONE - Added wood back to more pages
+DONE - added coffee cup to more pages
+DONE - add shadows to buttons
+
+DONE - Added areas to city page
+DONE - Added deletion of areas and corresponding subcities
+DONE - Added Area table
+DONE - Added toggler of areas
+
+DONE - Finished city page with areas
+DONE - 
+ALTER TABLE  `cities` ADD  `area_id` INT NOT NULL AFTER  `cityname` ,
+ADD  `type` ENUM(  'city',  'area' ) NOT NULL AFTER  `area_id`
+DONE - 
+Create area id 
+Add to all
+ALTER TABLE  `leads` ADD  `area_id` INT NOT NULL AFTER  `quad_id`
+
+
+DONE--
+ALTER TABLE  `settings` ADD  `leads_cities` INT( 1 ) NOT NULL AFTER  `lead_secondtier` ,
+ADD  `leads_areas` INT( 1 ) NOT NULL AFTER  `leads_cities`
+
+
+DONE - Fix process app glitch where it refreshes the page back
+DONE - Fix add city glitch
+DONE - Make stats totals again
+DONE - Fix processing button to blackout when processing lead
+DONE - Add recruit statistics to profile page
+
+DONE - fix payment calculator to include reg fees as optional
+
+DONE - add column sorter to lead uploader front end
+DONE - 
+
+
+Add xls_columns to all db in settings tables
+ALTER TABLE  `settings` ADD  `xls_columns` VARCHAR( 1600 ) NOT NULL AFTER  `creditcard_types`
+Add file_folders to all settings tables
+DONE - 
+ALTER TABLE  `settings` ADD  `file_folders` MEDIUMTEXT NOT NULL AFTER  `expense_tags`
+
+
+DONE - Add column identifier for uploading of leads BACK END
+DONE- Make payment calculator Reg fees optional
+
+DONE - Fix mdhealth leaderboard
+Add mdhealth2 to all company tables
+DONE - 
+INSERT INTO `companies` (`id`, `company_name`, `company_code`, `shortcode`, `month_total`, `month_units`, `net_def`, `net_maj`, `total_sales`, `total_dems`, `total_calls`, `total_bookings`, `total_notint`, `total_nq`, `total_contact`, `total_dns`, `total_cancelled`, `contest_totals`, `contest_left`, `contest_buffer`, `contest_goal`, `sales_buffer`, `unit_buffer`, `total_units`, `top_reps`, `top_marketers`, `links`, `web_address`) VALUES ('', 'MD Health Systems (2)', '', 'mdhealth2', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'http://mdhealth2.aws.af.cm');
+
+DONE - Fix previous week on reports
+
+DONE - Add previous week net to dealer report
+DONE - Add date_unlocked to all tables
+ALTER TABLE  `game_users` ADD  `date_unlocked` DATETIME NOT NULL AFTER  `times_achieved`
+DONE - Fix RECALL glitch where name is not applied to recalls
+
+DONE - add super nova front-end
+DONE - add super nova back-end
+
+DONE - 
+Insert pureair into all DB's
+INSERT INTO `companies` (`id`, `company_name`, `company_code`, `shortcode`, `month_total`, `month_units`, `net_def`, `net_maj`, `total_sales`, `total_dems`, `total_calls`, `total_bookings`, `total_notint`, `total_nq`, `total_contact`, `total_dns`, `total_cancelled`, `contest_totals`, `contest_left`, `contest_buffer`, `contest_goal`, `sales_buffer`, `unit_buffer`, `total_units`, `links`, `top_reps`, `top_marketers`, `web_address`) VALUES ('15', 'Pure Air Solutions', '', 'pureair', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'http:/./pureair.aws.af.cm');
+
+Put supernova into all DB's
+ALTER TABLE  `sales` ADD  `deffive` INT NOT NULL AFTER  `deffour` ,
+ADD  `deffive_old` INT NOT NULL AFTER  `deffour_old`,
+CHANGE  `typeofsale`  `typeofsale` ENUM(  'majestic',  'defender',  'system',  'supersystem',  'megasystem',  'megasystem',  'novasystem',  '2defenders',  '3defenders',  '2maj',  '3maj',  '2system', 'supernova' ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL
+
+
+DONE - Make sure breathe ez is all correct XLS uploads
+DONE - Setup PureAir
+DONE - Copy of database
+
+
+DONE - 
+Add event table to all DB's
+DONE - Create event model
+DONE - 
+Add event_id to lead tabls across all db's
+ALTER TABLE  `leads` ADD  `event_id` INT NOT NULL AFTER  `referral_id`
+
+DONE -
+Create Referral Manager for Foxvalley
+
+DONE-
+Add prev week to reports page
+
+Create COASTAL AIRE in all DB's
+
+INSERT INTO `companies` (`id`, `company_name`, `company_code`, `shortcode`, `month_total`, `month_units`, `net_def`, `net_maj`, `total_sales`, `total_dems`, `total_calls`, `total_bookings`, `total_notint`, `total_nq`, `total_contact`, `total_dns`, `total_cancelled`, `contest_totals`, `contest_left`, `contest_buffer`, `contest_goal`, `sales_buffer`, `unit_buffer`, `total_units`, `links`, `top_reps`, `top_marketers`, `web_address`) VALUES ('16', 'Coastal Aire Concepts', '', 'coastal', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'http://coastalaire.aws.af.cm');
+
+DPONE - 
+Add duplicate settings to all DB's
+ALTER TABLE  `settings` ADD  `duplicate_type` ENUM(  'not_allowed',  'allow_all',  'allow_different_types' ) NOT NULL AFTER  `no_renters` ,
+ADD  `duplicate_timeframe` ENUM(  '3_months',  '6_months',  '8_months',  '1_year' ) NOT NULL AFTER  `duplicate_type`
+
+DONE -
+Allow renters to be a choice
+DONE - 
+allow duplicates to be a choice
+
+DONE - Rep stats on bubble hover
+DONE - 
+Lead bubble showing newst type of lead
+
+DONe - 
+Fix rebook sorting bug
+
+DONE - 
+Make temperature Faranheit for US, and celsius for Canada
+
+-----------------------------------------------------------------------
+
+Implement duplicate and renter choices into uploads
+
+
+Dealer profiles on login of dealer
+and then use that to visit dealer
+
+
+
+
+Add scratch card mailouts to manilla cost calulation on marketing report
+add localStorage for marketing filter refresh memory
+
+Fix rebook reappearing glitch
+
+613-720-6829
+
+
+Fix all gamiefication tables
+Add income to all tables
+ALTER TABLE  `leads` ADD  `income` VARCHAR( 150 ) NOT NULL AFTER  `age_range`
+
+
+Fix formatting on totals on dealer reports
+
+
+Trophy case - 80%
+DONE - Star search program profile
+Star search dashboard
+Income hidden, only visible to Super User (Expenses);
+
+
+
+
+DELETE FROM  `gameification` WHERE id <13
+
+
+
+Booking per hour On pac for dashboard. 2.5 is goal Red.green
+
+
+Redesign Inventory System to hold inventory-Sale reference table
+
+Add needed appointments calender
+Fix Booking stats / Top marketer refernce.  Reference stats::saleStats();
+Fix excel journal to include correct count
+
+
+
+UPDATE companies SET `company_name` = 'Atlas Air', `web_address` = 'http://atlasair.aws.af.cm' WHERE `id` = 1 AND `company_name` = 'Winnipeg Health Supply'
+
+
+Implement points system for bookers.
+Implement points system for doorreps.
+
+
+Dashboard Page
+
+Standings of all
+
+Goals
+
+closing percentage
+closing average
+
+Booker stats
+cONTACT PERCENTAGE
+
+Booking stats fix on side panel. (off) - Re-implement stats to get from main stats function
+
+
+Add link to profile page from contact book
+Add link to profile page from agent page
+Add recruits to employee page
+
+Add recruit contests/badges
+
+Add city population data to cities as optional thing
+
+
+Add alerts when someone achieves a badge
+Add alerts when someone achieves a sale
+Add congratulatory points when someone comments on a sale
+Get points for picking up machines
+
+Profile
+Putons per day
+Average per hour
+
+NID for surveyors, count as book/.complete
+Treat like DNC
+
+Sales Journal
+Red column in ridealong not red when filled out
+
+City filter on reports page
+Add financing options 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////
+***** DATABASE BACKUP LINKS FOR APPFOG **********
+/////////////////////////////////////////////////
+
+Date of backup - October 15th 4:08am
+AdvancedAir
+http://dl.aws.af.cm/serialized/mysql/da774d7fd910f4a4d898244e5c5371656/snapshots/23075?token=0cX6vfzQa3em
+Winhealth
+http://dl.aws.af.cm/serialized/mysql/d46bdddecad2049baa272056d37e066a4/snapshots/23076?token=Q3v7ynK9gsjl
+BreatheEZ
+http://dl.aws.af.cm/serialized/mysql/dbfe22d4783a34b29acedbeb4d220444d/snapshots/23077?token=MkRrkEtb40eF
+
