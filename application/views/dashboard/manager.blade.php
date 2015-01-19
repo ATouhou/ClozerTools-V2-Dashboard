@@ -4,22 +4,46 @@
 
 <h3>{{Auth::user()->tenantName()}}</h3>
 <?php 
-$appointments = Appointment::take(20)->get();
-
+$modules = array("modules.widgets.portlets","modules.appointments.board","modules.widgets.weather","modules.widgets.sales");
 ?>
+@include('modules.dashboard.grid')
 
-@foreach($appointments as $a)
-	{{$a->lead->address}} - {{$a->lead->cust_num}}<br/>
+@foreach($modules as $m)
+	@include($m)
 @endforeach
+			
 
 <script>
 $(document).ready(function(){
 	var user = $('#user_type').val();
-	//$('#ajax-loaded-area').html("Manager Area");
-	
-});
 
+});
 </script>
+
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		var $draggable_portlets = $(".draggable-portlets");
+
+		$(".draggable-portlets .sorted" ).sortable({
+			connectWith: ".draggable-portlets .sorted",
+			handle: '.panel-heading',
+			containment: 'window',
+			start: function()
+			{
+				$draggable_portlets.addClass('dragging');
+			},
+			stop: function()
+			{
+				$draggable_portlets.removeClass('dragging');
+			}
+		});
+
+		$( ".draggable-portlets .sorted .panel-heading" ).disableSelection();
+
+	});
+</script>
+
 
 @endsection
 

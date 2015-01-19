@@ -19,7 +19,7 @@
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/xenon-components.css">
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/xenon-skins.css">
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/custom.css">
-
+	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/gridster.css">
 	<script src="{{URL::to_asset('assets/')}}js/jquery-1.11.1.min.js"></script>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -27,8 +27,6 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
-
-
 </head>
 <body class="page-body">
 	<div class="settings-pane">
@@ -90,14 +88,7 @@
 			</div>
 			@include('layouts.footer')
 		</div>
-	
-			
 		@include('layouts.chatsystem')
-	
-	
-
-
-
 	<!-- Bottom Scripts -->
 	<script src="{{URL::to_asset('assets/')}}js/bootstrap.min.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/TweenMax.min.js"></script>
@@ -106,8 +97,11 @@
 	<script src="{{URL::to_asset('assets/')}}js/xenon-api.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/xenon-toggles.js"></script>
 
-
+	<script src="{{URL::to_asset('assets/')}}js/xenon-widgets.js"></script>
+	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/fonts/meteocons/css/meteocons.css">
+	<script src="{{URL::to_asset('assets/')}}js/jquery-ui/jquery-ui.min.js"></script>
 	<!-- JavaScripts initializations and stuff -->
+	<script src="{{URL::to_asset('assets/')}}js/gridster/gridster.min.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/xenon-custom.js"></script>
 
 </body>
