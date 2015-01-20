@@ -1,10 +1,11 @@
 @layout('layouts/main')
 @section('content')
 <input type="hidden" name="user_type" id="user_type" value="{{Auth::user()->user_type}}" />
-
-<h3>{{Auth::user()->tenantName()}}</h3>
+<div class="row">
+<h3>{{Auth::user()->tenantName()}} - Dashboard</h3>
+</div>
 <?php 
-$modules = array("modules.widgets.portlets","modules.appointments.board","modules.widgets.weather","modules.widgets.sales");
+$modules = array("modules.appointments.board","modules.widgets.weather","modules.widgets.sales");
 ?>
 @include('modules.dashboard.grid')
 
@@ -20,29 +21,7 @@ $(document).ready(function(){
 });
 </script>
 
-<script type="text/javascript">
-	$(document).ready(function()
-	{
-		var $draggable_portlets = $(".draggable-portlets");
 
-		$(".draggable-portlets .sorted" ).sortable({
-			connectWith: ".draggable-portlets .sorted",
-			handle: '.panel-heading',
-			containment: 'window',
-			start: function()
-			{
-				$draggable_portlets.addClass('dragging');
-			},
-			stop: function()
-			{
-				$draggable_portlets.removeClass('dragging');
-			}
-		});
-
-		$( ".draggable-portlets .sorted .panel-heading" ).disableSelection();
-
-	});
-</script>
 
 
 @endsection

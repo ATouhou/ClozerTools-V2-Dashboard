@@ -1,9 +1,18 @@
 <?php $modules = GridModule::myModules();?>
 <style>
-.gridster li {
-	list-style:none;
-	text-decoration:none;
-	border:1px solid #ccc;
+.item {cursor:pointer;}
+#dashboard-container {
+	margin-top:20px;
+	margin-bottom:30px;
+}
+.no-gutter [class*="-6"] {
+	padding-left:0;
+    padding-right:0;
+}
+
+
+.widgetRemove {
+	background:#000;
 }
 </style>
 <div class="row">
@@ -11,45 +20,71 @@
 	<button class='btn btn-success saveWidgets'>SAVE LAYOUT</button>
 	<button class='btn btn-danger removeWidget'>REMOVE WIDGET</button>
 </div>
-<div class="row">
-	<div class="gridster">
-	    <ul>
-	    	@foreach($modules as $m)
-	        <li data-row="{{$m->data_row}}" data-col="{{$m->data_col}}" data-sizex="{{$m->data_sizex}}" data-sizey="{{$m->data_sizey}}">
-	        	{{$m->module_name}}
-	        </li>
-	      @endforeach
-	    </ul>
+<div class="row ">
+	<div id="dashboard-container" class="js-packery"
+	  data-packery-options='{ "itemSelector": ".item", "gutter": 10 }'>
+		@foreach($modules as $m)
+			<div class="item col-lg-{{$m->widget->lg_size}} col-sm-{{$m->widget->sm_size}} col-xs-{{$m->widget->xs_size}}" data-id="{{$m->id}}">
+				@include($m->widget->widget_template)
+			</div>
+		@endforeach
 	</div>
 </div>
 
+<div class="row" style="margin-bottom:40px"></div>
 <script>
 $(document).ready(function(){
-	$(".gridster ul").gridster({
-    	    widget_margins: [5, 5],
-    	    widget_base_dimensions: [140, 140],
-    	    widget_selector: "li"
-    	    
-    	});
+	var $container = $('#dashboard-container');
+	//Initialize Packer Grid
+	initGrid();
+	function initGrid(){
+		$container.packery({
+		  itemSelector: '.item'
+		});
+  		$container.find('.item').each( makeEachDraggable );
+  		$container.packery( 'on', 'dragItemPositioned', function( pckryInstance, draggedItem ) {
+			
+		});
+	}
+	function makeEachDraggable( i, itemElem ) {
+    		var draggie = new Draggabilly( itemElem );
+    		$container.packery( 'bindDraggabillyEvents', draggie );
+  	}
 
-	var gridster = $(".gridster ul").gridster().data('gridster');
 	$('.addWidget').click(function(){
-		gridster.add_widget('<li class="new">The HTML of the widget...</li>', 2, 1);
+		var id = 1; var sizex=4; var sizey = 2; var row=1; var col = 1;
+		$.get('{{URL::to("widget/create")}}',{theid:id,custom_name:"Test"},function(data){
+			var elem = "<div class='item col-sm-"+sizex+"'>"+data+"</div>";
+			var $items = $(elem);
+    			$container.append( $items );
+    			$container.packery( 'destroy' );
+    			initGrid();
+		});
 	});
 
 	$('.saveWidgets').click(function(){
-		alert(gridster.serialize());
+		
 	});
 
 	$('.removeWidget').click(function(){
-		gridster.remove_widget($('.gridster li').eq(3));
+		$(".item").addClass('widgetRemove');
 	});
 	
-	
- 	
-    	
-
-
+	$container.on('click','.widgetRemove',function(event){
+		var t = confirm("Are you sure you want to remove this widget?");
+		if(t){
+			var id = $(this).data('id');
+			var th = $(this);
+			$.get('{{URL::to("widget/remove/")}}',{theid:id},function(data){
+				if(data=="success"){
+					$container.packery( 'remove', th);
+  					$container.packery();
+				} 
+			});
+		} else {
+			$(".item").removeClass('widgetRemove');
+		}
+	});
 });
 </script>
 

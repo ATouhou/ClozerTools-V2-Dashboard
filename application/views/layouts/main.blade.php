@@ -102,6 +102,8 @@
 	<script src="{{URL::to_asset('assets/')}}js/jquery-ui/jquery-ui.min.js"></script>
 	<!-- JavaScripts initializations and stuff -->
 	<script src="{{URL::to_asset('assets/')}}js/gridster/gridster.min.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/packery/pack.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/packery/drag.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/xenon-custom.js"></script>
 
 </body>
