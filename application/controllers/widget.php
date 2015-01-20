@@ -5,7 +5,8 @@ class Widget_Controller extends Base_Controller
     		parent::__construct();
     		$this->filter('before','auth');
   	}
-  // APPOINTMENT API
+    
+    // WIDGET CRUD FUNCTIONS
   	public function action_index(){
   		$input = Input::get();
   		$widget = Widget::find($input['theid']);
@@ -52,4 +53,22 @@ class Widget_Controller extends Base_Controller
   			return Response::json("failed");
   		}
   	}
+
+
+    // WIDGET PAGES & FORMS
+    public function action_addnewwidget(){
+      $myWidgets = GridModule::myModules();
+      $ids = array();
+      if($myWidgets){
+        foreach($myWidgets as $my){
+          $ids[] = $my->widget_id;
+        }
+      }
+      $widgets = Widget::get();
+      return View::make('forms.newwidget')->with('widgets',$widgets)->with('myWidgets',$ids);
+    }
+
+
+
+
 }

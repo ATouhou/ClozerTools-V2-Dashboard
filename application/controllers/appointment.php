@@ -5,6 +5,18 @@ class Appointment_Controller extends Base_Controller
     parent::__construct();
     $this->filter('before','auth');
   }
+  // APPOINTMENT API
+  public function action_getappts(){
+  	$appointments = Appointment::get();
+
+
+
+  }
+
+
+  //
+
+
 
   //**********MAIN INDEX PAGE*************//
   public function action_index(){ 

@@ -21,7 +21,7 @@
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/custom.css">
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/gridster.css">
 	<script src="{{URL::to_asset('assets/')}}js/jquery-1.11.1.min.js"></script>
-
+	<script src="{{URL::to_asset('assets/')}}js/toastr/toastr.min.js"></script>
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -90,6 +90,12 @@
 		</div>
 		@include('layouts.chatsystem')
 	<!-- Bottom Scripts -->
+
+	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}js/daterangepicker/daterangepicker-bs3.css">
+	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}js/select2/select2.css">
+	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}js/select2/select2-bootstrap.css">
+	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}js/multiselect/css/multi-select.css">
+	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}js/icheck/skins/all.css">
 	<script src="{{URL::to_asset('assets/')}}js/bootstrap.min.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/TweenMax.min.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/resizeable.js"></script>
@@ -97,13 +103,33 @@
 	<script src="{{URL::to_asset('assets/')}}js/xenon-api.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/xenon-toggles.js"></script>
 
+	<script src="{{URL::to_asset('assets/')}}js/daterangepicker/daterangepicker.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/datepicker/bootstrap-datepicker.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/timepicker/bootstrap-timepicker.min.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/colorpicker/bootstrap-colorpicker.min.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/select2/select2.min.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/jquery-ui/jquery-ui.min.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/selectboxit/jquery.selectBoxIt.min.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/tagsinput/bootstrap-tagsinput.min.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/typeahead.bundle.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/handlebars.min.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/multiselect/js/jquery.multi-select.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/icheck/icheck.min.js"></script>
+
 	<script src="{{URL::to_asset('assets/')}}js/xenon-widgets.js"></script>
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/fonts/meteocons/css/meteocons.css">
-	<script src="{{URL::to_asset('assets/')}}js/jquery-ui/jquery-ui.min.js"></script>
+	
 	<!-- JavaScripts initializations and stuff -->
 	<script src="{{URL::to_asset('assets/')}}js/gridster/gridster.min.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/packery/pack.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/packery/drag.js"></script>
+
+	<script src="{{URL::to_asset('assets/')}}js/devexpress-web-14.1/js/globalize.min.js"></script>
+	<script src="{{URL::to_asset('assets/')}}js/devexpress-web-14.1/js/dx.chartjs.js"></script>
+
+	
+	
+
 	<script src="{{URL::to_asset('assets/')}}js/xenon-custom.js"></script>
 
 </body>

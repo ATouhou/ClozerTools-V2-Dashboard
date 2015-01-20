@@ -24,7 +24,7 @@
 	<div id="dashboard-container" class="js-packery"
 	  data-packery-options='{ "itemSelector": ".item", "gutter": 10 }'>
 		@foreach($modules as $m)
-			<div class="item col-lg-{{$m->widget->lg_size}} col-sm-{{$m->widget->sm_size}} col-xs-{{$m->widget->xs_size}}" data-id="{{$m->id}}">
+			<div class="item col-lg-{{$m->widget->lg_size}} col-sm-{{$m->widget->sm_size}} col-xs-{{$m->widget->xs_size}}" data-widgetid="{{$m->widget->id}}" data-id="{{$m->id}}">
 				@include($m->widget->widget_template)
 			</div>
 		@endforeach
@@ -43,7 +43,6 @@ $(document).ready(function(){
 		});
   		$container.find('.item').each( makeEachDraggable );
   		$container.packery( 'on', 'dragItemPositioned', function( pckryInstance, draggedItem ) {
-			
 		});
 	}
 	function makeEachDraggable( i, itemElem ) {
@@ -52,15 +51,12 @@ $(document).ready(function(){
   	}
 
 	$('.addWidget').click(function(){
-		var id = 1; var sizex=4; var sizey = 2; var row=1; var col = 1;
-		$.get('{{URL::to("widget/create")}}',{theid:id,custom_name:"Test"},function(data){
-			var elem = "<div class='item col-sm-"+sizex+"'>"+data+"</div>";
-			var $items = $(elem);
-    			$container.append( $items );
-    			$container.packery( 'destroy' );
-    			initGrid();
-		});
+		$('#dynamic-modal').modal({backdrop:'static'});
+		$('.dynamic-modal-title').html("Add a New Widget");
+		$('.dynamic-modal-body').load("{{URL::to('widget/addnewwidget')}}");
 	});
+
+	
 
 	$('.saveWidgets').click(function(){
 		
@@ -79,12 +75,17 @@ $(document).ready(function(){
 				if(data=="success"){
 					$container.packery( 'remove', th);
   					$container.packery();
+  					//toastr.success("Removed Widget Successfully","Removed Widget");
 				} 
 			});
 		} else {
 			$(".item").removeClass('widgetRemove');
 		}
 	});
+
+	
+	
+					
 });
 </script>
 
