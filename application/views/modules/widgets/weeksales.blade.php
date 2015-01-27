@@ -10,7 +10,7 @@
 				<i class="fa-calendar"></i>
 			</div>
 			<div class="xe-label">
-				<strong class="num"></strong>
+				<strong class="num widgetDataPoint" data-key=""></strong>
 				<span>DEMONSTRATIONS THIS WEEK</span>
 			</div>
 		</div>

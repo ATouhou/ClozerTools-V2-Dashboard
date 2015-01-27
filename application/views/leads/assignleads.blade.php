@@ -55,17 +55,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($appts as $app)
-							<tr>
-								<th><span class="co-name">{{$app->lead->cust_name}} </span></th>
-								<td>597.74</td>
-								<td>12:12PM</td>
-								<td>14.81 (2.54%)</td>
-								<td>582.93</td>
-								<td>597.95</td>
-								<td>597.73 x 100</td>
-							</tr>		
-							@endforeach
+							
 						</tbody>
 					</table>
 					</div>

@@ -8,18 +8,18 @@ class Appointment_Controller extends Base_Controller
   // APPOINTMENT API
   public function action_getappts(){
   	$appointments = Appointment::get();
-
-
-
   }
 
 
-  //
+  public function action_index(){
+  	$appts = Appointment::where('app_date','=',date('Y-m-d',strtotime('-5 Months')))->order_by('app_time','DESC')->get();
+  	return View::make('appointment.board')->with('appts',$appts);
+  }
 
 
 
   //**********MAIN INDEX PAGE*************//
-  public function action_index(){ 
+  public function action_oldindex(){ 
     $input = Input::get();
     if(isset($input['appdate'])){
       $date = date('Y-m-d', strtotime(Input::get('appdate')));

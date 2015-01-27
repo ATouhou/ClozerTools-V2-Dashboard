@@ -6,8 +6,12 @@ class Lead_Controller extends Base_Controller
         	$this->filter('before','auth');
     	}
 
+    	public function action_index(){
+    		return View::make('leads.assignleads');
+    	}
+
     	//MAIN LEAD PAGE
-    	public function action_index()
+    	public function action_oldindex()
     	{   
     	  if(Auth::user()->user_type=="agent" && Auth::user()->assign_leads!=1){return Redirect::to('dashboard');}
         if(Auth::user()->user_type=="doorrep"){return Redirect::to('dashboard');}

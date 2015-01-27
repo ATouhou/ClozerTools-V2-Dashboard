@@ -1,8 +1,15 @@
 <?php
 class Inventory extends Eloquent
 {
-    	public static $timestamps = true;
-    	public static $table = "inventory";
+    	public static $table = null;
+        public function __construct()
+        {
+            parent::__construct();
+            static::$table = Auth::user()->tenantTable()."_inventory";
+        }
+
+        public static $connection = 'clozertools-tenant-data';
+        public static $timestamps = true;
 
     	public function sold(){
         	return $this->belongs_to('Sale');

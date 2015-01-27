@@ -41,8 +41,6 @@ class Stats
   // Start Date = $datemin
   // End Date = $datemax
   // City = $city
-  // Rep = $rep
-  // Usertype = $usertype
   public static function saleStats($datemin,$datemax,$city){
       if($datemin=="MONTH"){
         $dates = Stats::getMonthandWeek();
@@ -56,255 +54,173 @@ class Stats
         $datemin = "2010-01-01";
         $datemax = "2020-01-01";
       }
-      $company = explode("-",Setting::find(1)->title);
+      $set = Setting::find(Auth::user()->tenant_id);
+      $company = explode("-",$set->title);
       $company = $company[0];
-      $shortcode = Setting::find(1)->shortcode;
-      $weekdetails = DB::query("SELECT *, IF(sales + puton, 100*sales/puton, NULL) AS close, IF(puton+tot, 100*puton/tot, NULL) AS complete
-      FROM (SELECT COUNT(*) as tot,rep_name, rep_id, 
-      SUM(status!='DISP') tots,
-      SUM(status='RB-OF' ) rbof, SUM(status='RB-TF') rbtf, SUM(status='CXL') cxl, SUM(systemsale='defender') def, SUM(systemsale='majestic') maj, SUM(systemsale='2maj') twomaj, SUM(systemsale='3maj') threemaj, SUM(systemsale='system') sys, 
-      SUM(systemsale='supersystem') super, SUM(systemsale='megasystem') mega, SUM(systemsale='novasystem') nova, 
-      SUM(systemsale='supernova') supernova, SUM(systemsale='2system') twosystem, SUM(systemsale='2defenders') twodef, 
-      SUM(systemsale='3defenders') threedef, SUM(systemsale='other') other,
-      SUM(status='CXL' AND rep_id!=0) cxlrep,SUM(status='RB-OF' AND rep_id!=0) rbofrep, SUM(status='RB-TF' AND rep_id!=0) rbtfrep, SUM(status='DNS')dns, SUM(status='INC') inc, SUM(status='SOLD') sales,
-      SUM(status='DNS' OR status='SOLD') puton, SUM(status='NQ') nq,SUM(status='DISP') disp, SUM(status!='RB-TF' AND status!='RB-OF') total_booked
-      FROM appointments WHERE app_date >= DATE('".$datemin."') AND app_date <= DATE('".$datemax."') $city GROUP BY rep_name ORDER BY puton) as SUBQUERY ");
+      $shortcode = $set->shortcode;
+      $conn = DB::connection("clozertools-tenant-data");
       
-      $saledetails = DB::query("SELECT COUNT(*) as tot, user_id, sold_by, SUM(picked_up=0) nettot, SUM(typeofsale='defender') def,
-      SUM(typeofsale='majestic') maj,SUM(typeofsale='2maj') twomaj, SUM(typeofsale='3maj') threemaj, SUM(typeofsale='system') system, SUM(status='COMPLETE' OR status='PAID') net,
-      SUM(status='CANCELLED' OR status='TURNDOWN' OR status='TBS') cxl,
-      SUM(typeofsale='supersystem') super, SUM(typeofsale='novasystem') nova, SUM(typeofsale='supernova') supernova, SUM(typeofsale='megasystem') mega,
-      SUM(typeofsale='2defenders') twodef, SUM(typeofsale='3defenders') threedef,
-      SUM(typeofsale='2system') twosystem,
-      SUM(typeofsale='defender' AND (picked_up=0)) netdef, SUM((picked_up=0) AND typeofsale='majestic') netmaj,
-      SUM((picked_up=0) AND typeofsale='2maj') nettwomaj,SUM((picked_up=0) AND typeofsale='3maj') netthreemaj, 
-      SUM((picked_up=0) AND typeofsale='system') netsys, SUM((picked_up=0) AND typeofsale='2system') nettwosys, SUM((picked_up=0) AND typeofsale='supersystem') netsuper, 
-      SUM((picked_up=0) AND typeofsale='megasystem') netmega, SUM((picked_up=0) AND typeofsale='novasystem') netnova, SUM((picked_up=0) AND typeofsale='supernova') netsupernova,
-      SUM((picked_up=0) AND typeofsale='3defenders') netthreedef, 
-      SUM((picked_up=0) AND typeofsale='2defenders') nettwodef,
-      SUM((picked_up=0) AND typeofsale='other') other
-      FROM sales WHERE date >= DATE('".$datemin."') AND date <= DATE('".$datemax."') $city GROUP BY user_id ");
-      
-      $othersales = Sale::where('typeofsale','=','other')->where('date','>=',$datemin)->where('date','<=',$datemax)->get();
-
-
-      $salesarray=array();
-
-      $disp=0;$dns=0;$cxl=0;$inc=0;$rbofrep=0 ;$rbtfrep=0; $cxlrep=0;$puton=0;$rbtf=0;$rbof=0;$close=0;$complete=0;$allapp=0;$sold=0;$nq=0;
-      $gmaj=0;$nmaj=0;$gdef=0;$gmaj=0;$system_points=0;$gold_points=0;$silver_points=0;$bronze_points=0;
-      foreach($weekdetails as $w){
-        if($w->sales!=0 || $w->dns!=0){
-          $com = 100-(($w->sales+$w->dns)/($w->sales+$w->dns+$w->inc+$w->rbtf+$w->rbof+$w->cxl))*100;
-        } else {
-          $com = 0;
+      // Get saletypes in system
+      $saleTypes = SaleItem::getItems();
+      $statusTypes = StatusPipeline::getPipeline();
+      $netSaletypeQuery = "";$grossSaletypeQuery = "";
+      $netStatustypeQuery = "";$grossStatustypeQuery = "";
+      $statusSortBy = "";
+      $putonVisit = "SUM(";$booked = "SUM(";
+      $itemVariables = array(); $statusVariables = array();
+      // Build Query for SUMMING all sales by type
+      if($saleTypes){
+        foreach($saleTypes as $st){
+          $qty = SaleItem::getQty($st->id);
+          $itemVariables["grosssaleitem_".$st->id] = array("count"=>0,"name"=>$st->name,"qty"=>$qty,"units"=>0);
+          $grossSaletypeQuery.="SUM(sale_item='".$st->name."') grosssaleitem_".$st->id.",";
+          $netSaletypeQuery.="SUM((picked_up=0) AND sale_item='".$st->name."' ) netsaleitem_".$st->id.",";
         }
-        $disp+=$w->disp;$dns+=$w->dns;$rbofrep+=$w->rbofrep ;$rbtfrep+=$w->rbtfrep ; $cxlrep+=$w->cxlrep;$cxl+=$w->cxl;$inc+=$w->inc;$rbtf+=$w->rbtf;$rbof+=$w->rbof;$nq+=$w->nq;
-        $puton+=$w->puton;$allapp+=$w->total_booked;$sold+=$w->sales;
-
-        if($w->rep_id!=0){
-          $user = User::find($w->rep_id);
-          if($user){
-            $system_points+=$user->system_points;$gold_points+=$user->gold_points;$silver_points+=$user->silver_points;
-            $bronze_points+=$user->bronze_points;
-        $salesarray[$w->rep_id] = array(
-          "name"=>$w->rep_name,
-          "avatar"=>$user->avatar_link(),
-          "system_points"=>$user->system_points,
-          "bronze_points"=>$user->bronze_points,
-          "silver_points"=>$user->silver_points,
-          "gold_points"=>$user->gold_points,
-          "company"=>$company,
-          "shortcode"=>$shortcode,
-          "rep_id"=>$w->rep_id,
-          "appointment" =>array(
-            "TOTALS"=>$w->total_booked,
-            "SOLD"=>$w->sales,
-            "DISP"=>$w->disp,
-            "DNS"=>$w->dns,
-            "CXL"=>$w->cxl,
-            "CXLREP"=>$w->cxlrep,
-            "INC"=>$w->inc,
-            "RBTF"=>$w->rbtf,
-            "RBOF"=>$w->rbof,
-            "RBTFREP"=>$w->rbtfrep,
-            "RBOFREP"=>$w->rbofrep,
-            "PUTON"=>$w->puton,
-            "CLOSE"=>$w->close,
-            "COMPLETE"=>$com),
-          "grosssales"=>0,
-          "netsales"=>0,
-          "cancelledsales"=>0,
-          "grosssale"=>array(
-          "defender"=>0,"majestic"=>0,"2maj"=>0,"3maj"=>0,"system"=>0,"supersystem"=>0,
-          "novasystem"=>0,"supernovasystem"=>0,"megasystem"=>0,"2system"=>0,"3defenders"=>0,
-          "2defenders"=>0,"other"=>0),
-          "netsale"=>array(
-          "defender"=>0,"majestic"=>0,"2maj"=>0,"3maj"=>0,"system"=>0,"supersystem"=>0,
-          "novasystem"=>0,"supernovasystem"=>0,"megasystem"=>0,"2system"=>0,"3defenders"=>0,
-          "2defenders"=>0,"other"=>0),
-          "totgrossunits"=>0,
-          "grossmd"=>array("majestic"=>0,"defender"=>0),
-          "grossunits"=>array("defender"=>0,"majestic"=>0,
-          "2maj"=>0,"3maj"=>0,
-          "system"=>0,"supersystem"=>0,"novasystem"=>0,"supernovasystem"=>0,
-          "megasystem"=>0,"2system"=>0,"3defenders"=>0,"2defenders"=>0,"other"=>0),
-          "totnetunits"=>0,
-          "netmd"=>array("majestic"=>0,"defender"=>0),
-          "netunits"=>array("defender"=>0,"majestic"=>0,
-          "2maj"=>0,"3maj"=>0,
-          "system"=>0,"supersystem"=>0,"novasystem"=>0,"supernovasystem"=>0,
-          "megasystem"=>0,"2system"=>0,"3defenders"=>0,"2defenders"=>0,"other"=>0)
-          );
+      }
+      //Build query for status types
+      if($statusTypes){
+        foreach($statusTypes as $stat){
+          $statusVariables["status_".str_replace(" ","",strtolower($stat->status_code))] = 0;
+          if($stat->pipeline_sort==1){
+            $statusSortBy = "status_".str_replace(" ","",strtolower($stat->status_code));
           }
+          if($stat->pipeline_booked==1){
+            $booked.="status='".$stat->status_code."' OR ";
+          }
+          if($stat->pipeline_visit==1){
+            $putonVisit.="status='".$stat->status_code."' OR ";
+          }
+          $grossStatustypeQuery.="SUM(status='".$stat->status_code."') status_".str_replace(" ","",strtolower($stat->status_code)).",";
+          $netStatustypeQuery.="SUM((picked_up=0) AND status='".$stat->status_code."' ) netstatus_".str_replace(" ","",strtolower($stat->status_code)).",";
         }
       }
-
-    $gsales=0;$nsales=0;$cxlsales=0;
-    foreach($saledetails as $s){
-      if(array_key_exists($s->user_id,$salesarray)){
-        $cxlsales+=$s->cxl;
-        $gsales+=$s->tot;$nsales+=$s->nettot;
-        
-        $salesarray[$s->user_id]["grosssales"]=$s->tot;
-        $salesarray[$s->user_id]["netsales"]=$s->nettot;
-        $salesarray[$s->user_id]["grosssale"]=array(
-          "defender"=>$s->def,"majestic"=>$s->maj,"2maj"=>$s->twomaj,"3maj"=>$s->threemaj,"system"=>$s->system+($s->twosystem*2),"supersystem"=>$s->super,
-          "novasystem"=>$s->nova,"supernovasystem"=>$s->supernova,"megasystem"=>$s->mega,"2system"=>$s->twosystem,"3defenders"=>$s->threedef,
-          "2defenders"=>$s->twodef,"other"=>$s->other);
-        $salesarray[$s->user_id]["netsale"]=array(
-          "defender"=>$s->netdef,"majestic"=>$s->netmaj,"2maj"=>$s->nettwomaj,"3maj"=>$s->netthreemaj,"system"=>$s->netsys+($s->nettwosys*2),"supersystem"=>$s->netsuper,
-          "novasystem"=>$s->netnova,"supernovasystem"=>$s->netsupernova,"megasystem"=>$s->netmega,"2system"=>$s->nettwosys,"3defenders"=>$s->netthreedef,
-          "2defenders"=>$s->nettwodef,"other"=>$s->other);
-      };
-      }
-
-
+      // Trim characters from query strings
+      $grossSaletypeQuery = rtrim($grossSaletypeQuery, ',');
+      $netSaletypeQuery = rtrim($netSaletypeQuery, ',');
+      $grossStatustypeQuery = rtrim($grossStatustypeQuery, ',');
+      $netStatustypeQuery = rtrim($netStatustypeQuery, ',');
+      $putonVisit = rtrim($putonVisit,' OR ');
+      $putonVisit.=") total_puton";
+      $booked = rtrim($booked,' OR ');
+      $booked.=") total_booked";
+      // end query string generation
+      $totalStatusVariables = $statusVariables;
+      // Get appointment stats based on Status Pipeline
+      $weekdetails = $conn->query("SELECT COUNT(*) as tot,rep_name, rep_id, 
+      SUM(status!='DISP') tots, ".$grossStatustypeQuery.",".$putonVisit.",".$booked."
+      FROM ".Auth::user()->tenantTable()."_appointments WHERE 
+      app_date >= DATE('".$datemin."') AND app_date <= DATE('".$datemax."') $city GROUP BY rep_name ORDER BY ".$statusSortBy);
       
-       if($sold!=0 && $puton!=0){
-        $close = number_format(($sold/($dns+$sold))*100,2,'.','');
-        $complete = number_format(100-(($sold+$dns)/($cxl+$inc+$rbtf+$rbof+$sold+$dns))*100,2,'.','');
-     }
-     
-     $totals=array(
-     "name"=>"totals",
-     "avatar"=>"",
-     "company"=>$company,
-     "system_points"=>$system_points,
-     "bronze_points"=>$bronze_points,
-     "silver_points"=>$silver_points,
-     "gold_points"=>$gold_points,
-     "shortcode"=>$shortcode,
-     "rep_id"=>"totals",
-     "appointment" =>array(
-            "TOTALS"=>$allapp,
-            "SOLD"=>$sold,
-            "DISP"=>$disp,
-            "DNS"=>$dns,
-            "CXL"=>$cxl,
-            "CXLREP"=>$cxlrep,
-            "INC"=>$inc,
-            "RBTF"=>$rbtf,
-            "RBOF"=>$rbof,
-            "RBTFREP"=>$rbtfrep,
-            "RBOFREP"=>$rbofrep,
-            "PUTON"=>$puton,
-            "CLOSE"=>$close,
-            "COMPLETE"=>$complete),
-          "grosssales"=>$gsales,
-          "netsales"=>$nsales,
-          "cancelledsales"=>$cxlsales,
-          "grosssale"=>array(
-          "defender"=>0,"majestic"=>0,"2maj"=>0,"3maj"=>0,"system"=>0,"supersystem"=>0,
-          "novasystem"=>0,"supernovasystem"=>0,"megasystem"=>0,"2system"=>0,"3defenders"=>0,
-          "2defenders"=>0,"other"=>0),
-          "netsale"=>array(
-          "defender"=>0,"majestic"=>0,"2maj"=>0,"3maj"=>0,"system"=>0,"supersystem"=>0,
-          "novasystem"=>0,"supernovasystem"=>0,"megasystem"=>0,"2system"=>0,"3defenders"=>0,
-          "2defenders"=>0,"other"=>0),
-          "totgrossunits"=>0,
-          "grossmd"=>array("majestic"=>0,"defender"=>0),
-          "grossunits"=>array("defender"=>0,"majestic"=>0,
-            "2maj"=>0,"3maj"=>0,
-          "system"=>0,"supersystem"=>0,"novasystem"=>0,
-          "megasystem"=>0,"supernovasystem"=>0,"2system"=>0,"3defenders"=>0,"2defenders"=>0,"other"=>0),
-          "totnetunits"=>0,
-          "netmd"=>array("majestic"=>0,"defender"=>0),
-          "netunits"=>array("defender"=>0,"majestic"=>0,
-            "2maj"=>0,"3maj"=>0,
-          "system"=>0,"supersystem"=>0,"novasystem"=>0,"supernovasystem"=>0,
-          "megasystem"=>0,"2system"=>0,"3defenders"=>0,"2defenders"=>0,"other"=>0)
-        );
-    
-
-    foreach($salesarray as $s){
-      foreach($s["grosssale"] as $k=>$v){
-          if($k!="2system"){
-            if($k=="other"){
-              $otherdef=0;$othermaj=0;$othertot=0;
-              if(!empty($othersales)){
-                foreach($othersales as $sale){
-                  if($sale->user_id == $s['rep_id']){
-                    $items = $sale->items;
-                    if(!empty($items)){
-                      foreach($items as $i){
-                        if($i->item_name=="defender"){
-                          $otherdef++;
-                          $othertot++;
-                        } else if($i->item_name=="majestic"){
-                          $othermaj++;
-                          $othertot++;
-                        } 
-                      }                   
+      $saledetails = $conn->query("SELECT COUNT(*) as tot, user_id, sold_by, SUM(picked_up=0) nettot, ".$grossSaletypeQuery.", 
+      SUM(status='COMPLETE' OR status='PAID') net, SUM(status='CANCELLED' OR status='TURNDOWN' OR status='TBS') cxl,".$netSaletypeQuery."
+      FROM ".Auth::user()->tenantTable()."_sales WHERE date >= DATE('".$datemin."') AND date <= DATE('".$datemax."') $city GROUP BY user_id ");
+      $othersales = Sale::where('sale_item','=','other')->where('date','>=',$datemin)->where('date','<=',$datemax)->get();
+      $salesarray=array();
+      $system_points=0;$gold_points=0;$silver_points=0;$bronze_points=0;$totalbooked = 0;
+      if($weekdetails){
+        foreach($weekdetails as $week){
+          foreach($week as $k=>$v){
+            if(array_key_exists($k,$totalStatusVariables)){
+              $totalStatusVariables[$k] = $totalStatusVariables[$k]+$v;
+            }
+          }
+          if($week->rep_id!=0){
+            $user = User::find($week->rep_id);
+            if($user){
+                $apps = $statusVariables;
+                foreach($week as $k=>$v){
+                  if($week->rep_id==$user->id){
+                    if(array_key_exists($k,$apps)){
+                      $apps[$k] = $apps[$k]+$v;
                     }
                   }
                 }
-              }
-              $u = array("tot"=>$othertot,"maj"=>$othermaj,"def"=>$otherdef);
-
-            } else {
-              $u = Sale::getUnits($k);
+                $apps["TOTALS"] = $week->total_booked;
+                $totalbooked+=$week->total_booked;
+                $system_points+=$user->system_points;$gold_points+=$user->gold_points;$silver_points+=$user->silver_points;$bronze_points+=$user->bronze_points;
+                $salesarray[$week->rep_id] = array(
+                  "name"=>$week->rep_name,
+                  "avatar"=>$user->avatar_link(),
+                  "system_points"=>$user->system_points,
+                  "bronze_points"=>$user->bronze_points,
+                  "silver_points"=>$user->silver_points,
+                  "gold_points"=>$user->gold_points,
+                  "company"=>$company,
+                  "shortcode"=>$shortcode,
+                  "rep_id"=>$week->rep_id,
+                  "appointment" =>$apps,
+                  "grosssales"=>0,
+                  "netsales"=>0,
+                  "cancelledsales"=>0,
+                  "grosssale"=>$itemVariables,
+                  "netsale"=>$itemVariables,
+                  "totgrossunits"=>0,
+                  "totnetunits"=>0
+                );
             }
-
-            $units = $s["grosssale"][$k]*$u["tot"];
-            $majs = $s["grosssale"][$k]*$u["maj"];
-            $defs = $s["grosssale"][$k]*$u["def"];
-            
-            $s["totgrossunits"] = intval($s["totgrossunits"])+intval($units);
-            $s["grossmd"]["majestic"] = $s["grossmd"]["majestic"]+$majs;
-            $s["grossmd"]["defender"] = $s["grossmd"]["defender"]+$defs;
-            $s["grossunits"][$k] = $s["grossunits"][$k]+$units;
-            
-            $totals["grossunits"][$k] += intval($units);
-            $totals["totgrossunits"] +=  intval($units);
-            $totals["grosssale"][$k] += $s["grosssale"][$k];
-            $totals["grossmd"]["majestic"] += $majs;
-            $totals["grossmd"]["defender"] += $defs; 
-          
-          }
-      }
-      foreach($s["netsale"] as $k=>$v){
-         if($k!="2system"){
-          $u = Sale::getUnits($k);
-          $units = $s["netsale"][$k]*$u["tot"];
-          $majs = $s["netsale"][$k]*$u["maj"];
-          $defs = $s["netsale"][$k]*$u["def"];
-          
-          $s["totnetunits"] = intval($s["totnetunits"])+intval($units);
-          $s["netmd"]["majestic"] = $s["netmd"]["majestic"]+$majs;
-          $s["netmd"]["defender"] = $s["netmd"]["defender"]+$defs;
-          $s["netunits"][$k] = $s["netunits"][$k]+$units;
-          
-          $totals["netunits"][$k] += intval($units);
-          $totals["totnetunits"] +=  intval($units);
-          $totals["netsale"][$k] += $s["netsale"][$k];
-          $totals["netmd"]["majestic"] += $majs;
-          $totals["netmd"]["defender"] += $defs; 
+          } 
         }
       }
-      $newarray[$s["rep_id"]] = $s;
-    }
-       
+      $cxlsales=0;$grosssales=0;$netsales=0;$totgrossunits=0;$totnetunits=0;
+      $totgrosssalesarray = $itemVariables; $totnetsalesarray= $itemVariables;
+      foreach($saledetails as $salekey=>$s){
+         if(array_key_exists($s->user_id,$salesarray)){
+          $cxlsales+=$s->cxl;$grosssales+=$s->tot;$netsales+=$s->nettot;
+          $salesarray[$s->user_id]["grosssales"]=$s->tot;
+          $salesarray[$s->user_id]["netsales"]=$s->nettot;
+          foreach($s as $salekey=>$val){
 
+            if(array_key_exists($salekey,$salesarray[$s->user_id]['grosssale'])){
+              $totalunits = 0;
+              $salesarray[$s->user_id]['grosssale'][$salekey]['count'] = $val;
+              $salesarray[$s->user_id]['grosssale'][$salekey]['units'] = $val*$salesarray[$s->user_id]['grosssale'][$salekey]['qty'];
+              $totalunits += ($val*$salesarray[$s->user_id]['grosssale'][$salekey]['qty']);
+              $salesarray[$s->user_id]['totgrossunits'] += $totalunits;
+              // Add totals to totals array
+              $totgrosssalesarray[$salekey]['count'] += $val;
+              $totgrosssalesarray[$salekey]['units'] += $val*$totgrosssalesarray[$salekey]['qty'];
+              $totgrossunits+=$val*$totgrosssalesarray[$salekey]['qty'];
+             
+            }
+            if(array_key_exists($salekey,$salesarray[$s->user_id]['netsale'])){
+              $totalunits = 0;
+              $salesarray[$s->user_id]['netsale'][$salekey]['count'] = $val;
+              $salesarray[$s->user_id]['netsale'][$salekey]['units'] = $val*$salesarray[$s->user_id]['netsale'][$salekey]['qty'];
+              $totalunits += ($val*$salesarray[$s->user_id]['netsale'][$salekey]['qty']);
+              $salesarray[$s->user_id]['totnetunits'] += $totalunits;
+              // Add totals to totals array
+              $totnetsalesarray[$salekey]['count'] += $val;
+              $totnetsalesarray[$salekey]['units'] += $val*$totnetsalesarray[$salekey]['qty'];
+              $totnetunits+=$val*$totnetsalesarray[$salekey]['qty'];
+            }
+          }
+         }
+      }
+      $totalStatusVariables["TOTALS"] = $totalbooked;
+      $totals=array(
+        "name"=>"totals",
+        "avatar"=>"",
+        "company"=>$company,
+        "system_points"=>$system_points,
+        "bronze_points"=>$bronze_points,
+        "silver_points"=>$silver_points,
+        "gold_points"=>$gold_points,
+        "shortcode"=>$shortcode,
+        "rep_id"=>"totals",
+        "appointment" =>$totalStatusVariables,
+          "grosssales"=>$grosssales,
+          "netsales"=>$netsales,
+          "cancelledsales"=>$cxlsales,
+          "grosssale"=>$totgrosssalesarray,
+          "netsale"=>$totnetsalesarray,
+          "totgrossunits"=>$totgrossunits,
+          "totnetunits"=>$totnetunits
+        );
+
+
+      foreach($salesarray as $s){
+        $newarray[$s["rep_id"]] = $s;
+      }
       $newarray["totals"] = $totals;
       usort($newarray, function($a, $b){
         return $a['totgrossunits'] - $b['totgrossunits'];
@@ -314,8 +230,8 @@ class Stats
       foreach($newarray as $k=>$v){
         $new[$v['rep_id']]= $v;
       }
-       
       return $new;
+  
     }
 
     public static function apptStats($type=null){
@@ -536,7 +452,7 @@ class Stats
             SUM(status='SOLD') sold, SUM(status='DNS') dns, SUM(status='INC') inc, SUM(units) units FROM appointments 
             WHERE rep_id!=0 AND WEEK(app_date,1)=WEEK('".date('Y-m-d')."',1) AND YEAR(app_date)=YEAR(NOW())) AS subquery");
     
-            $sale = DB::query("SELECT id,payout,typeofsale, ridealong_payout,ridealong_id,user_id,status FROM sales WHERE WEEK(date,1)=WEEK('".date('Y-m-d')."',1) AND YEAR(date)=YEAR(NOW())");
+            $sale = DB::query("SELECT id,payout,sale_item, ridealong_payout,ridealong_id,user_id,status FROM sales WHERE WEEK(date,1)=WEEK('".date('Y-m-d')."',1) AND YEAR(date)=YEAR(NOW())");
 
         } else  if(($period=="RANGE")&&(!empty($start))){
            
@@ -550,7 +466,7 @@ class Stats
             SUM(status='SOLD') sold, SUM(status='DNS') dns, SUM(status='INC') inc, SUM(units) units FROM appointments 
             WHERE rep_id!=0 AND app_date>='".$start."' AND app_date<='".$end."') AS subquery");
    
-             $sale = DB::query("SELECT id,payout,typeofsale, ridealong_payout,ridealong_id,user_id,status FROM sales WHERE date >= DATE('".$start."') AND date <= DATE('".$end."')");
+             $sale = DB::query("SELECT id,payout,sale_item, ridealong_payout,ridealong_id,user_id,status FROM sales WHERE date >= DATE('".$start."') AND date <= DATE('".$end."')");
 
         } else {
         
@@ -564,7 +480,7 @@ class Stats
             SUM(status='SOLD') sold, SUM(status='DNS') dns, SUM(status='INC') inc, SUM(units) units FROM appointments 
             WHERE rep_id!=0 AND $period(app_date)=$period('".date('Y-m-d')."')) AS subquery");
             
-            $sale = DB::query("SELECT id,payout,typeofsale,ridealong_payout,ridealong_id,typeofsale,user_id,status FROM sales WHERE $period(date)=$period('".date('Y-m-d')."')");
+            $sale = DB::query("SELECT id,payout,sale_item,ridealong_payout,ridealong_id,sale_item,user_id,status FROM sales WHERE $period(date)=$period('".date('Y-m-d')."')");
         }
 
         $arr=array();
@@ -579,8 +495,8 @@ class Stats
                     if($sale){
                         foreach($sale as $s){
                             if($s->user_id==$val->rep_id){
-                                if($s->typeofsale){
-                                    $u = Stats::units($s->typeofsale);
+                                if($s->sale_item){
+                                    $u = Stats::units($s->sale_item);
                                     if(($s->status!="CANCELLED")&&($s->status!="TURNDOWN")&&($s->status!="TBS")){
                                         $val->netunits = $val->netunits+$u['maj']+$u['def'];
                                         $val->netmaj = $val->netmaj + $u['maj'];
@@ -782,8 +698,8 @@ class Stats
             }
 
 
-           $sales = DB::query("SELECT typeofsale, payout, ridealong_id,user_id, status FROM sales WHERE MONTH(date) = MONTH('".date('Y-m-d')."') AND YEAR(date)=YEAR(NOW()) ".$user_id);
-           $allsales = DB::query("SELECT typeofsale, payout,  ridealong_id,user_id, status FROM sales ".$where_user."");
+           $sales = DB::query("SELECT sale_item, payout, ridealong_id,user_id, status FROM sales WHERE MONTH(date) = MONTH('".date('Y-m-d')."') AND YEAR(date)=YEAR(NOW()) ".$user_id);
+           $allsales = DB::query("SELECT sale_item, payout,  ridealong_id,user_id, status FROM sales ".$where_user."");
            $appointments = DB::query("SELECT COUNT(id) as cnt, diff, app_date, SUM(status='DNS') dns, SUM(status='SOLD') sold,  SUM(status='INC') inc FROM appointments 
            WHERE MONTH(app_date) = MONTH('".date('Y-m-d')."') AND YEAR(app_date)=YEAR(NOW()) AND (status='SOLD' OR status='DNS' OR status='INC') ".$rep_id."  GROUP BY app_date ");
           $times = DB::query("SELECT COUNT(*) as tot, app_time, SUM(status='SOLD') sold, SUM(status='INC') inc, SUM(status='DNS') dns FROM appointments 
@@ -926,8 +842,8 @@ class Stats
             $netdef=0;$netdefenders=array();
             $cancelcount=0;$turndowncount=0;$totcancel=0;
            foreach($sales as $val){ 
-             if($val->typeofsale){
-                    $u = Stats::units($val->typeofsale);
+             if($val->sale_item){
+                    $u = Stats::units($val->sale_item);
                     $maj[] = intval($u['maj']);
                     $def[] = intval($u['def']);
                     $totdefarr[] = $u['def'];
@@ -966,7 +882,7 @@ class Stats
            
             foreach($allsales as $val){
             if($val->status=="COMPLETE"){
-                if($val->typeofsale){
+                if($val->sale_item){
                // $totmaj = $balance+intval($val->payout);
                if(($val->user_id==$id)||($id=="all")){
 

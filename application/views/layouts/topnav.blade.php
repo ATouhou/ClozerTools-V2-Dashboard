@@ -4,7 +4,7 @@
 				<ul class="user-info-menu left-links list-inline list-unstyled">
 			
 					<li class="hidden-sm hidden-xs">
-						<a href="#" data-toggle="sidebar">
+						<a class="hideMenuLink" href="#" data-toggle="sidebar">
 							<i class="fa-bars"></i>
 						</a>
 					</li>

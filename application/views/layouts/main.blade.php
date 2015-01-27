@@ -20,6 +20,7 @@
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/xenon-skins.css">
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/custom.css">
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/gridster.css">
+	<link rel="stylesheet" href="{{URL::to_asset('css/')}}animate.css">
 	<script src="{{URL::to_asset('assets/')}}js/jquery-1.11.1.min.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/toastr/toastr.min.js"></script>
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -29,6 +30,12 @@
 	<![endif]-->
 </head>
 <body class="page-body">
+
+	@include('layouts.modal')
+
+	<!-- SITE STORED VARIABLES -->
+	<input type="hidden" id="mainURL" value="{{URL::to()}}"/>
+
 	<div class="settings-pane">
 		<a href="#" data-toggle="settings-pane" data-animate="true">
 			&times;
@@ -80,9 +87,13 @@
 				@include('layouts.menu')
 			</div>
 		</div>
-	
+		
 		<div class="main-content">
+			<input type="hidden" name="user_type" id="user_type" value="{{Auth::user()->user_type}}" />
 			@include('layouts.topnav')
+			<div id="loadingAnimation" style="display:none;float:left;background:#dcccba  ;height:1000px;margin-top:-40px;align:center;width:130%;margin-left:-30px;">
+				<img src='{{URL::to("img/loaders/200.gif")}}' style="margin-left:500px;margin-top:300px;width:18%;">
+			</div>
 			<div id="ajax-loaded-area">
 				@yield('content')
 			</div>
@@ -126,11 +137,38 @@
 
 	<script src="{{URL::to_asset('assets/')}}js/devexpress-web-14.1/js/globalize.min.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/devexpress-web-14.1/js/dx.chartjs.js"></script>
-
-	
-	
-
 	<script src="{{URL::to_asset('assets/')}}js/xenon-custom.js"></script>
+
+	<script src="{{URL::to_asset('assets/')}}js/app.js"></script>
+
+
+<script type="text/javascript">
+	jQuery(document).ready(function($)
+	{
+		if( ! $.isFunction($.fn.dxChart))
+			$(".dx-warning").removeClass('hidden');
+	});
+</script>
+			
+<script type="text/javascript">
+		if( ! $.isFunction($.fn.dxChart))
+			return;
+		// Charts
+		var xenonPalette = ['#68b828','#7c38bc','#0e62c7','#fcd036','#4fcdfc','#00b19d','#ff6264','#f7aa47'];
+		// Resize charts
+		$(window).on('xenon.resize', function()
+		{
+			$("#pageviews-visitors-chart").data("dxChart").render();
+			$("#server-uptime-chart").data("dxChart").render();
+			$("#realtime-network-stats").data("dxChart").render();
+			$('.first-month').data("dxSparkline").render();
+			$('.second-month').data("dxSparkline").render();
+			$('.third-month').data("dxSparkline").render();
+		});
+		
+	});
+</script>
+
 
 </body>
 </html>

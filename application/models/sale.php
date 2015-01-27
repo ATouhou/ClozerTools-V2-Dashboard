@@ -1,6 +1,14 @@
 <?php
 class Sale extends Eloquent
 {
+    public static $table = null;
+    public function __construct()
+    {
+        parent::__construct();
+        static::$table = Auth::user()->tenantTable()."_sales";
+    }
+
+    public static $connection = 'clozertools-tenant-data';
     public static $timestamps = true;
 
     public function user(){

@@ -64,7 +64,7 @@ class Widget_Controller extends Base_Controller
           $ids[] = $my->widget_id;
         }
       }
-      $widgets = Widget::get();
+      $widgets = Widget::order_by('widget_type')->get();
       return View::make('forms.newwidget')->with('widgets',$widgets)->with('myWidgets',$ids);
     }
 
