@@ -1,6 +1,6 @@
 <ul id="main-menu" class="main-menu">
 	<li>
-		<a href="dashboard-1.html">
+		<a href="{{URL::to('dashboard')}}">
 			<i class="linecons-cog"></i>
 			<span class="title">Dashboard</span>
 		</a>

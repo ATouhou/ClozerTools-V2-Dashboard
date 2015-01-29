@@ -1,4 +1,5 @@
 <div id="chat" class="fixed"><!-- start: Chat Section -->
+<?php $users = User::chatList()?>
 			<div class="chat-inner">
 				<h2 class="chat-header">
 					<a  href="#" class="chat-close" data-toggle="chat">
@@ -31,46 +32,48 @@
 				</script>
 				
 				
+				@if(!empty($users))
+					<?php $marketers="";$managers="";$salesreps="";$doorreps="";?>
+					@foreach($users as $u)
+						<?php
+							if($u->logged==1){
+								$log = "is-online";
+							} else {
+								$log = "is-offline";
+							}
+						    if($u->user_type=="manager"){
+								$managers.='<a href="#"><span class="user-status '.$log.'"></span> <em>'.ucfirst(strtolower($u->firstname)).' '.ucfirst(strtolower($u->lastname)).'</em></a>';
+							} else if($u->user_type=="agent"){
+								$marketers.='<a href="#"><span class="user-status '.$log.'"></span> <em>'.ucfirst(strtolower($u->firstname)).' '.ucfirst(strtolower($u->lastname)).'</em></a>';
+							} else if($u->user_type=="salesrep"){
+								$salesreps.='<a href="#"><span class="user-status '.$log.'"></span> <em>'.ucfirst(strtolower($u->firstname)).' '.ucfirst(strtolower($u->lastname)).'</em></a>';
+							} else if($u->user_type=="doorrep"){
+								$doorreps.='<a href="#"><span class="user-status '.$log.'"></span> <em>'.ucfirst(strtolower($u->firstname)).' '.ucfirst(strtolower($u->lastname)).'</em></a>';
+							} 
+						;?>
+					@endforeach
+				
 				<div class="chat-group">
-					<strong>Favorites</strong>
-					
-					<a href="#"><span class="user-status is-online"></span> <em>Catherine J. Watkins</em></a>
-					<a href="#"><span class="user-status is-online"></span> <em>Nicholas R. Walker</em></a>
-					<a href="#"><span class="user-status is-busy"></span> <em>Susan J. Best</em></a>
-					<a href="#"><span class="user-status is-idle"></span> <em>Fernando G. Olson</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Brandon S. Young</em></a>
+					<strong>Managers</strong>
+					{{$managers}}
 				</div>
-				
-				
+
 				<div class="chat-group">
-					<strong>Work</strong>
-					
-					<a href="#"><span class="user-status is-busy"></span> <em>Rodrigo E. Lozano</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Robert J. Garcia</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Daniel A. Pena</em></a>
+					<strong>Marketers</strong>
+					{{$marketers}}
 				</div>
-				
-				
+
 				<div class="chat-group">
-					<strong>Other</strong>
-					
-					<a href="#"><span class="user-status is-online"></span> <em>Dennis E. Johnson</em></a>
-					<a href="#"><span class="user-status is-online"></span> <em>Stuart A. Shire</em></a>
-					<a href="#"><span class="user-status is-online"></span> <em>Janet I. Matas</em></a>
-					<a href="#"><span class="user-status is-online"></span> <em>Mindy A. Smith</em></a>
-					<a href="#"><span class="user-status is-busy"></span> <em>Herman S. Foltz</em></a>
-					<a href="#"><span class="user-status is-busy"></span> <em>Gregory E. Robie</em></a>
-					<a href="#"><span class="user-status is-busy"></span> <em>Nellie T. Foreman</em></a>
-					<a href="#"><span class="user-status is-busy"></span> <em>William R. Miller</em></a>
-					<a href="#"><span class="user-status is-idle"></span> <em>Vivian J. Hall</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Melinda A. Anderson</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Gary M. Mooneyham</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Robert C. Medina</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Dylan C. Bernal</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Marc P. Sanborn</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Kenneth M. Rochester</em></a>
-					<a href="#"><span class="user-status is-offline"></span> <em>Rachael D. Carpenter</em></a>
+					<strong>Sales Reps</strong>
+					{{$salesreps}}
 				</div>
+				<div class="chat-group">
+					<strong>Door Reggiers</strong>
+					{{$doorreps}}
+				</div>
+				@endif
+
+	
 			
 			</div>
 			

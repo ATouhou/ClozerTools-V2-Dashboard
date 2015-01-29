@@ -81,9 +81,24 @@ function reapplyPopover(){
    	});
 }
 
+function applyMomentDates(){
+	$('.formatDate').each(function(i,val){
+		var type = $(this).data('datetype');
+		if(type==undefined || type==null || type==""){
+			$(this).html(moment().format("MMM Do YY"));
+		} else if(type=="relative"){
+			var date = $(this).html();
+			$(this).html(moment(moment.unix(date), "YYYYMMDD").fromNow());
+		}
+		
+	});
+}
 
 // BIND EVENTS
 $(document).ready(function(){
+
+		applyMomentDates();
+
 		// Store site variables for use
 		var user = $('#user_type').val();
 		var MainURL = $('#mainURL').val();

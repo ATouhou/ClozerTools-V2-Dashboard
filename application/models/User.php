@@ -17,13 +17,13 @@ class User extends Eloquent
     // END TENANT DATA
 
 
-    	// Display formatting functions
-    	// NAME FORMATTING FUNCTIONS
-    	public function fullname(){
-        	return ucfirst(strtolower($this->firstname))." ".ucfirst(strtolower($this->lastname));
-    	}
+    // Display formatting functions
+    // NAME FORMATTING FUNCTIONS
+    public function fullname(){
+    	return ucfirst(strtolower($this->firstname))." ".ucfirst(strtolower($this->lastname));
+    }
 
-    	public function profileName($type=null){
+    public function profileName($type=null){
         if($type=="has"){
             if(Auth::check()){
                 if($this->id==Auth::user()->id){
@@ -41,22 +41,57 @@ class User extends Eloquent
             } 
         }
         return $name;
-    	}	
+    }
 
-    	public function cellNo(){
-        	$num = str_replace(array("(",")","-"," ",":"),"",$this->cell_no);
-        	$num = "(".substr($num,0,3).") -".substr($num,3,3)."-".substr($num,6,4);
-        	return $num;
-    	}
+    public function truncName(){
+        return ucfirst(strtolower($this->firstname))." ".ucfirst($this->lastname[0]);
+    }
 
-     	public function truncName(){
-        	return ucfirst(strtolower($this->firstname))." ".ucfirst($this->lastname[0]);
-    	}
+    // AVATAR LINK
+    public function avatar_link(){
+        $shortcode = Setting::where('tenant_id','=',$this->tenant_id)->first();
+        if($shortcode){
+            if($this->avatar=="avatar.jpg"){
+                return URL::to_asset('images/').$this->avatar;
+            } else {
+            return "https://s3.amazonaws.com/salesdash/".$shortcode->shortcode."/avatars/".$this->avatar;
+            }
+        } else {
+            return URL::to_asset('images/').$this->avatar;
+        }        
+    }
 
-    	public function stat($type){
-    		$col = $type."_per";
-    		return $this->$col."%";
-    	}
+    public function cellNo(){
+    	$num = str_replace(array("(",")","-"," ",":"),"",$this->cell_no);
+    	$num = "(".substr($num,0,3).") -".substr($num,3,3)."-".substr($num,6,4);
+    	return $num;
+    }
+     
+    public function stat($type){
+    	$col = $type."_per";
+    	return $this->$col."%";
+    }
+
+
+
+    // ELOQUENT RELATIONSHIPS
+    public function received_messages()
+    {
+        return $this->has_many('Message', 'receiver_id');
+    }
+
+    public function sent_messages(){
+        return $this->has_many('Message','sender_id');
+    }
+
+
+    public function alerts()
+    {
+        return $this->has_many('Alert', 'receiver_id');
+    }
+
+
+
 
     	//GENERIC STATIC USER FUNCTIONS
     	public static function allUsers(){
@@ -94,6 +129,13 @@ class User extends Eloquent
         } else {
             return $users;
         }
+    }
+
+    public static function chatList(){
+        return User::where('type','=','employee')
+        ->where('level','!=',99)->order_by('firstname','ASC')
+        ->order_by('lastname','ASC')
+        ->get(array('id','user_type','firstname','lastname','logged'));
     }
 
     public static function getAverageTimes($id, $date, $type){
@@ -260,15 +302,7 @@ class User extends Eloquent
         return $close;
     }
 
-    public function messages()
-        {
-        return $this->has_many('Message');
-        }
-
-    public function alerts()
-    	{
-        return $this->has_many('Alert', 'receiver_id');
-   	}
+   
 
     public function employee()
     	{
@@ -460,18 +494,7 @@ class User extends Eloquent
     
     
 
-    public function avatar_link(){
-    	$shortcode = Setting::where('tenant_id','=',$this->tenant_id)->first();
-    	if($shortcode){
-    		if($this->avatar=="avatar.jpg"){
-            	return URL::to_asset('images/').$this->avatar;
-        	} else {
-        	return "https://s3.amazonaws.com/salesdash/".$shortcode->shortcode."/avatars/".$this->avatar;
-        	}
-    	} else {
-    		return URL::to_asset('images/').$this->avatar;
-    	}        
-    }
+    
 
     public function todayscalls(){
         $calls = DB::query("SELECT COUNT(*) as total, result, SUM(result='NH') nh, SUM(result='APP') app, SUM(result='NI') ni

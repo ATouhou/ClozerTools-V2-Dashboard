@@ -31,9 +31,7 @@
 	<![endif]-->
 </head>
 <body class="page-body">
-
 	@include('layouts.modal')
-
 	<!-- SITE STORED VARIABLES -->
 	<input type="hidden" id="mainURL" value="{{URL::to()}}"/>
 
@@ -43,7 +41,6 @@
 		</a>
 		<div class="settings-pane-inner">
 			<div class="row">
-				@include('plugins.userinfo')
 				@include('layouts.topmenu')
 			</div>
 		</div>
@@ -59,10 +56,10 @@
 				<header class="logo-env">
 					<div class="logo">
 						<a href="dashboard-1.html" class="logo-expanded">
-							<img src="{{URL::to_asset('assets/')}}images/ct-logo.png" width="140" alt="" />
+							<img src="{{URL::to_asset('assets/')}}images/ct-logo.png" width="160" alt="" />
 						</a>
 						<a href="dashboard-1.html" class="logo-collapsed">
-							<img src="{{URL::to_asset('assets/')}}images/ct-logo-collapsed.png" width="40" alt="" />
+							<img src="{{URL::to_asset('assets/')}}images/ct-logo-collapsed.png" width="50" alt="" />
 						</a>
 					</div>
 		
@@ -84,7 +81,7 @@
 						</a>
 					</div>
 				</header>
-				@include('plugins.usersidepanel')
+				@include('layouts.usersidepanel')
 				@include('layouts.menu')
 			</div>
 		</div>
@@ -139,7 +136,7 @@
 	<script src="{{URL::to_asset('assets/')}}js/devexpress-web-14.1/js/globalize.min.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/devexpress-web-14.1/js/dx.chartjs.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/xenon-custom.js"></script>
-
+	<script src="{{URL::to_asset('assets/')}}js/moment.min.js"></script>
 	<script src="{{URL::to_asset('assets/')}}js/app.js"></script>
 
 
