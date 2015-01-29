@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/xenon-components.css">
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/xenon-skins.css">
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/custom.css">
+	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/cus-icons.css">
 	<link rel="stylesheet" href="{{URL::to_asset('assets/')}}css/gridster.css">
 	<link rel="stylesheet" href="{{URL::to_asset('css/')}}animate.css">
 	<script src="{{URL::to_asset('assets/')}}js/jquery-1.11.1.min.js"></script>

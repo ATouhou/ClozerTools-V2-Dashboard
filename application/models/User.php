@@ -17,17 +17,57 @@ class User extends Eloquent
     // END TENANT DATA
 
 
+    	// Display formatting functions
+    	// NAME FORMATTING FUNCTIONS
+    	public function fullname(){
+        	return ucfirst(strtolower($this->firstname))." ".ucfirst(strtolower($this->lastname));
+    	}
 
-    //GENERIC USER FUNCTIONS
-    public static function allUsers(){
-        $users = User::where('id','!=',58)
-        ->where('type','=','employee')
-        ->where('level','!=',99)
-        ->order_by('firstname','ASC')
-        ->get();
-        
-        return $users;
-    }
+    	public function profileName($type=null){
+        if($type=="has"){
+            if(Auth::check()){
+                if($this->id==Auth::user()->id){
+                    $name = "You have";
+                } else {
+                    $name = ucfirst(strtolower($this->firstname))." has";
+                }
+            } 
+        } else {
+            $name = ucfirst(strtolower($this->firstname))."'s";
+            if(Auth::check()){
+                if($this->id==Auth::user()->id){
+                    $name = "Your";
+                } 
+            } 
+        }
+        return $name;
+    	}	
+
+    	public function cellNo(){
+        	$num = str_replace(array("(",")","-"," ",":"),"",$this->cell_no);
+        	$num = "(".substr($num,0,3).") -".substr($num,3,3)."-".substr($num,6,4);
+        	return $num;
+    	}
+
+     	public function truncName(){
+        	return ucfirst(strtolower($this->firstname))." ".ucfirst($this->lastname[0]);
+    	}
+
+    	public function stat($type){
+    		$col = $type."_per";
+    		return $this->$col."%";
+    	}
+
+    	//GENERIC STATIC USER FUNCTIONS
+    	public static function allUsers(){
+        	$users = User::where('id','!=',58)
+        	->where('type','=','employee')
+        	->where('level','!=',99)
+        	->order_by('firstname','ASC')
+        	->get();
+        	
+        	return $users;
+    	}
 
     public static function activeUsers($type,$method=null){
         $users = User::where('user_type','=',$type)
@@ -75,41 +115,7 @@ class User extends Eloquent
     }
 
 
-    // NAME FORMATTING FUNCTIONS
-    public function fullname(){
-        return ucfirst(strtolower($this->firstname))." ".ucfirst(strtolower($this->lastname));
-    }
-
-    public function profileName($type=null){
-        if($type=="has"){
-            if(Auth::check()){
-                if($this->id==Auth::user()->id){
-                    $name = "You have";
-                } else {
-                    $name = ucfirst(strtolower($this->firstname))." has";
-                }
-            } 
-        } else {
-            $name = ucfirst(strtolower($this->firstname))."'s";
-            if(Auth::check()){
-                if($this->id==Auth::user()->id){
-                    $name = "Your";
-                } 
-            } 
-        }
-        
-        return $name;
-    }
-
-    public function cellNo(){
-        $num = str_replace(array("(",")","-"," ",":"),"",$this->cell_no);
-        $num = "(".substr($num,0,3).") -".substr($num,3,3)."-".substr($num,6,4);
-        return $num;
-    }
-
-     public function truncName(){
-        return ucfirst(strtolower($this->firstname))." ".ucfirst($this->lastname[0]);
-    }
+    
     
     //RECRUITS 
     public function recruits(){

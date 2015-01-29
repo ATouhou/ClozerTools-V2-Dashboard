@@ -65,6 +65,23 @@ function getMessages(){
 	$('.systemMessages').load(MainURL+"alert/getmsgs");
 }
 
+//REAPPLY FEATURES TO NEWLY LOADED DATA
+// Reapply popovers to any newly loaded data
+function reapplyPopover(){
+	$('[data-toggle="popover"]').each(function(i, el)
+	{
+   		var $this = $(el),
+   		placement = attrDefault($this, 'placement', 'right'),
+   		trigger = attrDefault($this, 'trigger', 'click'),
+   		popover_class = $this.get(0).className.match(/(popover-[a-z0-9]+)/i);
+   		$this.popover({
+   			placement: placement,
+   			trigger: trigger
+   		});
+   	});
+}
+
+
 // BIND EVENTS
 $(document).ready(function(){
 		// Store site variables for use

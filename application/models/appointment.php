@@ -12,9 +12,14 @@ class Appointment extends Eloquent
     public static $timestamps = true;
      
     // Get the rep Appointment is dispatched to
-    public function rep(){
+    public function booker(){
+        return $this->belongs_to('User','booker_id');
+    }
+    public function salesrep(){
         return $this->belongs_to('User','rep_id');
     }
+   
+
 
     // Appointment belongs to Lead
     public function lead(){

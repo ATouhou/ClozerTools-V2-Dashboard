@@ -9,7 +9,113 @@ class Lead extends Eloquent
     }
     public static $connection = 'clozertools-tenant-data';
     public static $timestamps = true;
-    
+    // AJAX/API loading functions
+
+
+
+
+    // END AJAX
+
+    // Display page functions
+
+
+
+    // End display pages
+
+    // Functions for display formatting
+    public function displayCustName($upper=false,$spoused=false){
+        if($upper==true){
+            $name = explode(" ", strtoupper($this->cust_name));
+            $spouse = explode(" ", strtoupper($this->spouse_name));
+        } else {
+            $name = explode(" ", strtolower($this->cust_name));
+            $spouse = explode(" ", strtolower($this->spouse_name));
+        }
+        $displayname="";
+        if(isset($name[0])){
+            $displayname.=ucfirst($name[0]);
+        }
+        if(isset($name[1])){
+            $displayname.=" ".ucfirst($name[1]);
+        }
+        if($spoused==true){
+            if($this->spouse_name!="" && $this->spouse_name!="N" && $this->spouse_name!="NoSpouse"){
+                if(!empty($spouse)){
+                    $displayname.=" <b>and</b> ";
+                    if(isset($spouse[0])){
+                        $displayname.=ucfirst($spouse[0]);
+                    }
+                    if(isset($spouse[1])){  
+                        $displayname.=" ".ucfirst($spouse[1]);
+                    }
+                }
+            }
+        }
+        return $displayname;
+    }
+
+    public function displayAppTime($time,$type,$offset=false){
+
+
+        $display="";
+        $time2 = strtotime($time);
+        if($type=="ampm"){
+            $type = "g:i a";
+        } else {
+            $type = "h:i";
+        }
+
+        if($offset==true){
+            if($time2!=0){
+                if($this->app_offset>0){
+                    $t_o = "-".$this->app_offset." Hours";
+                } else {
+                    $t_o = str_replace("-","+",$this->app_offset)." Hours";
+                }
+                $offset_time = strtotime($t_o, $time2);
+                if($this->app_offset==0){
+                    return "";
+                } else {
+                    return date($type, strtotime($offset_time));
+                }
+            } else {
+                return "";
+            }
+        } else {
+            return date($type, $time2);
+        }
+    }
+
+    public function displayNum(){
+        $data = str_replace(array("-"," ",":",")","("),"",$this->cust_num);
+        $num = "(".substr($data, 0, 3).") ".substr($data, 3, 3)."-".substr($data,6);
+        return $num;
+    }
+
+    public function displayAddress(){
+        $address = explode(",",$this->address);
+        if(isset($address[0])){
+            return strtoupper($address[0]);
+        } else {
+            return "N/A";
+        }
+    }
+
+    public function leadTypeIcon(){
+        $leadtype = LeadType::where("leadtype_name","=",$this->original_leadtype)->first();
+        if($leadtype){
+            $str="";
+            $l = $leadtype->leadtype_icon;
+            if($this->leadtype=="Rebook" || $this->leadtype=="rebook"){
+                $str.="<span class='cus-arrow-redo' data-toggle='popover' data-trigger='hover' data-placement='top' data-content='This Lead has been booked, and then rebooked' data-original-title='REBOOKED'></span>";
+            }
+            $str.="<span class='".$l."' data-toggle='popover' data-trigger='hover' data-placement='top' data-content='".strtoupper($this->original_leadtype)." LEAD' data-original-title='LEADTYPE'></span>";
+            return $str;
+        } else {
+            return $this->original_leadtype;
+        }
+    }
+
 
     public function user(){
         return $this->belongs_to('User');
