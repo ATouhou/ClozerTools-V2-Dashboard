@@ -8,13 +8,19 @@ class Dashboard_Controller extends Base_Controller
 
     public function action_index()
     {   
-        // Maybe load initial data
+        // Maybe load initial data??
+
         // Load site data
         if(Auth::user()->user_type=="manager"){
             return Redirect::to('dashboard/manager');
         }
+
         if(Auth::user()->user_type=="salesrep"){
             return Redirect::to('dashboard/salesrep');
+        }
+
+        if(Auth::user()->user_type=="doorrep"){
+            return Redirect::to('dashboard/doorrep');
         }
         
         return "Acccess Allowed";
@@ -22,7 +28,8 @@ class Dashboard_Controller extends Base_Controller
 
     public function action_manager(){
         // Manager data goes here;
-        return View::make('dashboard.manager');
+        //return View::make('dashboard.manager');
+        return View::make('angular.index');
     }
 
     public function action_agent($type=null){

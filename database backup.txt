@@ -1,9 +1,0 @@
-11/2/2014
-
-pureair
-
-http://dl.aws.af.cm/serialized/mysql/d343b93f909674056b2054a283c8f93fc/snapshots/23230?token=f1qKUdG8DdoX
-
-pureair
-
-http://dl.aws.af.cm/serialized/mysql/d343b93f909674056b2054a283c8f93fc/snapshots/23229?token=3PZLZqLSFRah
